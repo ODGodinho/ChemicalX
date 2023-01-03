@@ -1,3 +1,2 @@
-import { exampleStanleyTemplate } from "./example";
-
-exampleStanleyTemplate();
+export * from "./crawler/index";
+export * from "./Helpers/index";

@@ -2,5 +2,8 @@
     "env": {
         "jest": true
     },
-    "extends": [ "@odg" ]
+    "extends": [ "@odg" ],
+    "globals": {
+        "Proxy": true
+    }
 }

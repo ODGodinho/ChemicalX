@@ -16,6 +16,7 @@ const jest: Config = {
             statements: 100,
         },
     },
+    testTimeout: 10_000,
     preset: "ts-jest",
     testEnvironment: "node",
     testMatch: [
