@@ -12,7 +12,6 @@ import {
 
 import { Browser, Context, Page } from "./index";
 
-jest.setTimeout(30_000);
 describe("Example Teste", () => {
     test("Teste Instances elements", async () => {
         const browser = await Browser.create<

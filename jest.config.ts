@@ -22,6 +22,7 @@ const jest: Config = {
     testMatch: [
         "<rootDir>/tests/jest/**/*.test.ts",
     ],
+    moduleDirectories: [ "node_modules", "src" ],
 };
 
 export default jest;

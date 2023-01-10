@@ -1,3 +1,4 @@
+import { type BrowserChemicalXInterface } from "../../../src";
 import { Browser as BrowserBase } from "../../../src/crawler/index";
 
 import {
@@ -13,7 +14,7 @@ export class Browser extends BrowserBase<
     BrowserClassEngine,
     ContextClassEngine,
     PageClassEngine
-> {
+> implements BrowserChemicalXInterface<BrowserClassEngine, ContextClassEngine> {
 
     public async browserOptions(): Promise<BrowserOptionsEngine> {
         return {

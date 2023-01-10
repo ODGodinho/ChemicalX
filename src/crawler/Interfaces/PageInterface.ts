@@ -5,7 +5,7 @@ import { type RetryAction } from "../../Helpers/retry";
 export interface PageInterface {
 
     /**
-     * Execute step
+     * Execute step With retry fail and finish
      *
      * @memberof BasePage
      * @returns {Promise<void>}
@@ -27,7 +27,7 @@ export interface PageInterface {
      * @param {Exception} exception Exception
      * @returns {Promise<RetryAction>}
      */
-    failed(exception: Exception): Promise<RetryAction>;
+    failedAttempt?(exception: Exception): Promise<RetryAction>;
 
     /**
      * If the page is finished with success or failure

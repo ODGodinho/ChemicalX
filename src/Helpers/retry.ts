@@ -1,6 +1,7 @@
 import { Exception, UnknownException } from "@odg/exception";
 
 import { type FunctionParameterType } from "../types/FunctionType";
+import { type PromiseOrSyncType } from "../types/PromiseSyncType";
 
 import { sleep } from ".";
 
@@ -48,7 +49,7 @@ export enum RetryAction {
  * @interface RetryOptionsInterface
  * @template ReturnType
  */
-interface RetryOptionsInterface<ReturnType> {
+interface RetryOptionsInterface<ReturnType = RetryAction> {
 
     /**
      * Number of times to retry
@@ -70,10 +71,10 @@ interface RetryOptionsInterface<ReturnType> {
     /**
      * Function to retry
      *
-     * @type {FunctionParameterType<Promise<ReturnType> | ReturnType, number>}
+     * @type {FunctionParameterType<PromiseOrSyncType<ReturnType>, number>}
      * @memberof RetryOptionsInterface
      */
-    callback: FunctionParameterType<Promise<ReturnType> | ReturnType, number>;
+    callback: FunctionParameterType<PromiseOrSyncType<ReturnType>, number>;
 
     /**
      * Validate what must be done before trying again
@@ -81,6 +82,22 @@ interface RetryOptionsInterface<ReturnType> {
      * @memberof RetryOptionsInterface
      */
     when?(exception: Exception, times: number): Promise<RetryAction> | RetryAction;
+}
+
+async function getWhen(
+    exception: unknown,
+    options: RetryOptionsInterface<unknown> & { attempt: number },
+): Promise<RetryAction.Default | RetryAction.Resolve | RetryAction.Retry | undefined> {
+    const exceptionParse = Exception.parse(exception) ?? new UnknownException("Retry unknown Exception", exception);
+    const when = await options.when?.(exceptionParse, options.attempt);
+    const ignore = [ RetryAction.Retry, RetryAction.Resolve ];
+    if (when === RetryAction.Throw) throw exceptionParse;
+
+    if (options.times <= 1 && !ignore.includes(when!)) {
+        throw exceptionParse;
+    }
+
+    return when;
 }
 
 /**
@@ -94,16 +111,11 @@ async function retryHelper<ReturnType>(
     options: RetryOptionsInterface<ReturnType> & { attempt: number },
 ): Promise<ReturnType | undefined> {
     try {
-        return await options.callback(options.attempt);
+        return await options.callback.call(options.callback, options.attempt);
     } catch (exception: unknown) {
-        const exceptionParse = Exception.parse(exception) ?? new UnknownException("Retry unknown Exception", exception);
-        const when = await options.when?.(exceptionParse, options.attempt);
+        const when = await getWhen(exception, options);
         if (when === RetryAction.Resolve) {
             return;
-        }
-
-        if ((options.times < 1 || when === RetryAction.Throw) && when !== RetryAction.Retry) {
-            throw exceptionParse;
         }
 
         await sleep(options.sleep ?? 0);

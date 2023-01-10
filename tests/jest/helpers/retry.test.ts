@@ -91,4 +91,28 @@ describe("Retry Test", () => {
 
         expect(callback).toHaveBeenCalledTimes(2);
     });
+
+    test("All Retry errors", async () => {
+        const callback = jest.fn(() => {
+            throw new Error("Example");
+        });
+
+        await expect(retry({
+            times: 4,
+            callback: callback,
+        })).rejects.toThrowError("Example");
+        expect(callback).toHaveBeenCalledTimes(4);
+    });
+
+    test("First Time retry resolve", async () => {
+        const callback = jest.fn(() => {
+            throw new Error("RetryResolve");
+        });
+
+        await expect(retry({
+            times: 1,
+            callback: callback,
+            when: () => RetryAction.Resolve,
+        })).resolves.toBeUndefined();
+    });
 });
