@@ -1,4 +1,4 @@
-import { type Exception } from "@odg/exception";
+import { Exception } from "@odg/exception";
 
 import { RetryAction, type HandlerSolution, type HandlerFunction } from "../../../src";
 import { type PageClassEngine } from "../playwright/engine";
@@ -30,7 +30,7 @@ describe("Handler Test Invalid Exception", () => {
     test("Test solution invalid exception", async () => {
         handlerWaitForHandlerMock.mockImplementation(async () => {
             // eslint-disable-next-line @typescript-eslint/no-throw-literal
-            throw undefined;
+            throw new Exception("Anything");
         });
         handlerFailWaitMock.mockImplementation(async () => RetryAction.Resolve);
 

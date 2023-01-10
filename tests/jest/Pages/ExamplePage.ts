@@ -26,7 +26,8 @@ export class ExamplePage extends BasePage<unknown, PageClassEngine & PageEngineI
     }
 
     public async goto(): Promise<void> {
-        void this.page.goto("https://www.google.com", { waitUntil: "domcontentloaded" })
+        this.page.goto("https://www.google.com", { waitUntil: "domcontentloaded" })
+            .then(() => null)
             .catch(() => null);
     }
 

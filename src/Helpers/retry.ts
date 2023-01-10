@@ -1,4 +1,4 @@
-import { Exception, UnknownException } from "@odg/exception";
+import { type Exception, UnknownException } from "@odg/exception";
 
 import { type FunctionParameterType } from "../types/FunctionType";
 import { type PromiseOrSyncType } from "../types/PromiseSyncType";
@@ -88,7 +88,7 @@ async function getWhen(
     exception: unknown,
     options: RetryOptionsInterface<unknown> & { attempt: number },
 ): Promise<RetryAction.Default | RetryAction.Resolve | RetryAction.Retry | undefined> {
-    const exceptionParse = Exception.parse(exception) ?? new UnknownException("Retry unknown Exception", exception);
+    const exceptionParse = UnknownException.parseOrDefault(exception, "Retry unknown Exception");
     const when = await options.when?.(exceptionParse, options.attempt);
     const ignore = [ RetryAction.Retry, RetryAction.Resolve ];
     if (when === RetryAction.Throw) throw exceptionParse;

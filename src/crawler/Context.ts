@@ -57,7 +57,7 @@ export abstract class Context<
         );
         const prepareContext = (
             $browserInstance.$browserInstance.newContext
-            ?? $browserInstance.$browserInstance.createIncognitoBrowserContext!
+            ?? $browserInstance.$browserInstance.createIncognitoBrowserContext
         ) as unknown as (options: ContextOptionsLibraryInterface) => Promise<ContextClassEngine>;
         contextInstance.$contextInstance = await prepareContext.call($browserInstance.$browserInstance, {
             ...await contextInstance.contextOptions(),

@@ -1,4 +1,4 @@
-import { Exception, UnknownException } from "@odg/exception";
+import { type Exception, UnknownException } from "@odg/exception";
 
 import { type RetryAction, retry } from "../..";
 import { type FunctionReturnType } from "../../types/FunctionType";
@@ -70,7 +70,7 @@ export abstract class BasePage<SelectorBaseType, PageClassEngine extends PageEng
     }
 
     private async executeCatcher(exception: unknown): Promise<void> {
-        const exceptionParsed = Exception.parse(exception) ?? new UnknownException("Page UnknownException", exception);
+        const exceptionParsed = UnknownException.parseOrDefault(exception, "Page UnknownException");
         await this.finish?.(exceptionParsed);
 
         if (this.failedPage) await this.failedPage(exceptionParsed);

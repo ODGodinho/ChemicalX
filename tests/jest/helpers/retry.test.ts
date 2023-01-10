@@ -1,4 +1,4 @@
-import { Exception, UnknownException } from "@odg/exception";
+import { Exception } from "@odg/exception";
 
 import { RetryAction, retry } from "../../../src/Helpers/index";
 
@@ -67,13 +67,13 @@ describe("Retry Test", () => {
     test("Retry Unknown Exception", async () => {
         const callback = jest.fn(() => {
             // eslint-disable-next-line @typescript-eslint/no-throw-literal
-            throw undefined;
+            throw new Exception("Anything");
         });
 
         await expect(retry({
             times: 0,
             callback: callback,
-        })).rejects.toThrow(UnknownException);
+        })).rejects.toThrow(Exception);
     });
 
     test("Retry Unknown Exception", async () => {

@@ -1,4 +1,4 @@
-import { Exception, UnknownException } from "@odg/exception";
+import { type Exception, UnknownException } from "@odg/exception";
 
 import { type PageEngineInterface } from "..";
 import { RetryAction, retry } from "../..";
@@ -52,8 +52,7 @@ export abstract class BaseHandler<
             await this.finish?.();
             await this.success?.();
         } catch (error) {
-            const exception = Exception.parse(error)
-                ?? new UnknownException("Handler UnknownException", error);
+            const exception = UnknownException.parseOrDefault(error, "Handler UnknownException");
 
             await this.finish?.(exception);
             await this.failedHandler(exception);
