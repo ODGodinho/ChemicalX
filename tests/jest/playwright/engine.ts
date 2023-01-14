@@ -5,6 +5,7 @@ import {
     type LaunchOptions,
     type Page,
     type BrowserContext,
+    type BrowserContextOptions,
 } from "playwright";
 
 import { type Browser as BrowserClass } from "./Browser";
@@ -19,6 +20,8 @@ export type ContextClassEngine = BrowserContext;
 export type PageClassEngine = Page;
 
 export type BrowserOptionsEngine = LaunchOptions;
+
+export type ContextOptionsEngine = BrowserContextOptions;
 
 export const browserEngine = chromium;
 

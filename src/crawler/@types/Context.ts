@@ -3,12 +3,6 @@ import { type PageEngineInterface, type PageChemicalXConstructorTypo } from "./P
 
 export interface ContextOptionsLibraryInterface {
 
-    /**
-     * Maximum time in milliseconds to wait for the response.
-     * Defaults to `30000` (30 seconds). Pass `0` to disable timeout.
-     */
-    timeout?: number;
-
 }
 
 export interface ContextEngineInterface {

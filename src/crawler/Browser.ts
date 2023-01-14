@@ -86,7 +86,7 @@ export abstract class Browser<
 
     public async browserOptions(): Promise<BrowserOptionsLibraryInterface> {
         return {
-            headless: false,
+            headless: true,
         };
     }
 
