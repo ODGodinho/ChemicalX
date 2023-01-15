@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/sort-type-constituents */
 import {
     type BrowserOptionsLibraryInterface,
     type BrowserChemicalXInterface,
@@ -54,7 +53,7 @@ export abstract class Browser<
         $pageClass: PageChemicalXConstructorTypo<
             BrowserTypeEngine, BrowserClassEngine, ContextClassEngine, PageClassEngine
         >,
-    ): BrowserClassEngine & BrowserChemicalXInterface<BrowserClassEngine, ContextClassEngine> {
+    ): BrowserChemicalXInterface<BrowserClassEngine, ContextClassEngine> & BrowserClassEngine {
         const browserInstance = new $browserClass(
             $browserEngine,
             $browserClass,

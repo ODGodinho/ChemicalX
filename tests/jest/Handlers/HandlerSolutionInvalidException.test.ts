@@ -29,7 +29,6 @@ describe("Handler Test Invalid Exception", () => {
 
     test("Test solution invalid exception", async () => {
         handlerWaitForHandlerMock.mockImplementation(async () => {
-            // eslint-disable-next-line @typescript-eslint/no-throw-literal
             throw new Exception("Anything");
         });
         handlerFailWaitMock.mockImplementation(async () => RetryAction.Resolve);

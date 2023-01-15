@@ -66,7 +66,6 @@ describe("Retry Test", () => {
 
     test("Retry Unknown Exception", async () => {
         const callback = jest.fn(() => {
-            // eslint-disable-next-line @typescript-eslint/no-throw-literal
             throw new Exception("Anything");
         });
 
