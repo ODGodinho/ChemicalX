@@ -75,6 +75,49 @@ export class Str implements CloneableInterface, NativeInterface<string> {
     }
 
     /**
+     * Extract Only [a-zA-Z0-9_] of string
+     * `abc 123.34 def` -> `abc12334def`
+     *
+     * @returns {this}
+     */
+    public onlyWordsCaracteres(): this {
+        this.subject = this.subject.replaceAll(/\W/g, "");
+
+        return this;
+    }
+
+    /**
+     * Replace variable of string with value
+     *
+     * - {{ variable }}
+     * - {{variable}}
+     *
+     * @returns {this}
+     */
+    public formatUnicorn(data: Record<string, number | string>): this {
+        for (const key in data) {
+            this.subject = this.subject.replaceAll(
+                // eslint-disable-next-line security/detect-non-literal-regexp
+                new RegExp(`\\{\\{\\s*${key.toString()}\\s*\\}\\}`, "gi"),
+                String(data[key]),
+            );
+        }
+
+        return this;
+    }
+
+    /**
+     * Make a string's first character uppercase.
+     *
+     * @returns {this}
+     */
+    public ucFirst(): this {
+        this.subject = this.subject.charAt(0).toUpperCase() + this.subject.slice(1);
+
+        return this;
+    }
+
+    /**
      * Convert To Number
      *
      * @returns {number}
@@ -101,6 +144,11 @@ export class Str implements CloneableInterface, NativeInterface<string> {
         return this.subject;
     }
 
+    /**
+     * Return all occurrences from moneyRegex.
+     *
+     * @returns {never[] | RegExpMatchArray}
+     */
     private moneyAllOccurrences(): never[] | RegExpMatchArray {
         // eslint-disable-next-line security/detect-non-literal-regexp
         return this.subject.match(new RegExp(this.moneyRegex, "g")) ?? [];
