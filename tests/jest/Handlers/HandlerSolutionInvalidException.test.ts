@@ -9,7 +9,7 @@ describe("Handler Test Invalid Exception", () => {
     let handler: ExampleHandler;
     let handlerSolutionMock: jest.SpyInstance<Promise<HandlerSolution>, unknown[]>;
     let handlerWaitForHandlerMock: jest.SpyInstance<Promise<HandlerFunction>, unknown[]>;
-    let handlerFailWaitMock: jest.SpyInstance<Promise<RetryAction>, [_exception: Exception]>;
+    let handlerFailWaitMock: jest.SpyInstance<Promise<RetryAction>, [_exception: Exception, _attempt: number]>;
     beforeEach(() => {
         handler = new ExampleHandler(undefined as unknown as PageClassEngine, {});
         handlerSolutionMock = jest.spyOn(handler, "testSolution");
