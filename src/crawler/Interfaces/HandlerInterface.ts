@@ -40,9 +40,10 @@ export interface HandlerInterface {
      *
      * @memberof HandlerInterface
      * @param {Exception} exception Exception
+     * @param {Exception} attempt Current Attempt
      * @returns {Promise<RetryAction>}
      */
-    failedWait(exception: Exception): Promise<RetryAction>;
+    failedWait(exception: Exception, attempt: number): Promise<RetryAction>;
 
     /**
      * If the page is finished with success or failure

@@ -73,10 +73,11 @@ export abstract class BaseHandler<
      *
      * @protected
      * @param {Exception} _exception Exception error
+     * @param {Exception} _attempt Tentativa Atual
      * @returns {Promise<RetryAction>}
      * @memberof BaseHandler
      */
-    public async failedWait(_exception: Exception): Promise<RetryAction> {
+    public async failedWait(_exception: Exception, _attempt: number): Promise<RetryAction> {
         return RetryAction.Default;
     }
 
