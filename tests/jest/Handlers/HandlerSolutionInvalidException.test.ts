@@ -14,7 +14,7 @@ describe("Handler Test Invalid Exception", () => {
         handler = new ExampleHandler(undefined as unknown as PageClassEngine, {});
         handlerSolutionMock = jest.spyOn(handler, "testSolution");
         handlerWaitForHandlerMock = jest.spyOn(handler, "waitForHandler");
-        handlerFailWaitMock = jest.spyOn(handler, "failedWait");
+        handlerFailWaitMock = jest.spyOn(handler, "failedAttempt");
     });
 
     test("Test solution invalid exception", async () => {

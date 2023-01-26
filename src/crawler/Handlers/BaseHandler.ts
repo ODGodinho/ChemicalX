@@ -77,7 +77,7 @@ export abstract class BaseHandler<
      * @returns {Promise<RetryAction>}
      * @memberof BaseHandler
      */
-    public async failedWait(_exception: Exception, _attempt: number): Promise<RetryAction> {
+    public async failedAttempt(_exception: Exception, _attempt: number): Promise<RetryAction> {
         return RetryAction.Default;
     }
 
@@ -105,7 +105,7 @@ export abstract class BaseHandler<
         const handler = await retry({
             callback: this.waitForHandler.bind(this),
             times: await this.attempt(),
-            when: this.failedWait.bind(this),
+            when: this.failedAttempt.bind(this),
         });
 
         return handler?.call(this);

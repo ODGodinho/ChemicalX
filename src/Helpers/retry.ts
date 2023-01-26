@@ -6,43 +6,6 @@ import { type PromiseOrSyncType } from "../types/PromiseSyncType";
 import { sleep } from ".";
 
 /**
- * Retry Enum return type
- *
- * @enum {string}
- */
-export enum RetryAction {
-
-    /**
-     * Use this force retry.
-     *
-     * @memberof RetryAction
-     */
-    Retry = "Retry",
-
-    /**
-     * Use this force retry error.
-     *
-     * @memberof RetryAction
-     */
-    Throw = "Throw",
-
-    /**
-     * Use this to complete Retry with undefined return
-     *
-     * @memberof RetryAction
-     */
-    Resolve = "Resolve",
-
-    /**
-     * To follow default behavior
-     * `times` is considered
-     *
-     * @memberof RetryAction
-     */
-    Default = "Default",
-}
-
-/**
  * Retry options
  *
  * @template {any} ReturnType Function callback return
@@ -126,6 +89,43 @@ async function retryHelper<ReturnType>(
             attempt: options.attempt + 1,
         });
     }
+}
+
+/**
+ * Retry Enum return type
+ *
+ * @enum {string}
+ */
+export enum RetryAction {
+
+    /**
+     * Use this force retry.
+     *
+     * @memberof RetryAction
+     */
+    Retry = "Retry",
+
+    /**
+     * Use this force retry error.
+     *
+     * @memberof RetryAction
+     */
+    Throw = "Throw",
+
+    /**
+     * Use this to complete Retry with undefined return
+     *
+     * @memberof RetryAction
+     */
+    Resolve = "Resolve",
+
+    /**
+     * To follow default behavior
+     * `times` is considered
+     *
+     * @memberof RetryAction
+     */
+    Default = "Default",
 }
 
 /**

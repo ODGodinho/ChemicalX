@@ -25,9 +25,10 @@ export interface PageInterface {
      *
      * @memberof BasePage
      * @param {Exception} exception Exception
+     * @param {number} attempt Current attempt
      * @returns {Promise<RetryAction>}
      */
-    failedAttempt?(exception: Exception): Promise<RetryAction>;
+    failedAttempt?(exception: Exception, attempt: number): Promise<RetryAction>;
 
     /**
      * If the page is finished with success or failure

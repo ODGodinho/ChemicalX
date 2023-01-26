@@ -43,7 +43,7 @@ export abstract class BasePage<SelectorBaseType, PageClassEngine extends PageEng
 
     public finish?(exception?: Exception | undefined): Promise<void>;
 
-    public failedAttempt?(exception: Exception): Promise<RetryAction>;
+    public failedAttempt?(exception: Exception, attempt: number): Promise<RetryAction>;
 
     public failedPage?(exception: Exception): Promise<void>;
 
@@ -63,9 +63,9 @@ export abstract class BasePage<SelectorBaseType, PageClassEngine extends PageEng
                 when: this.failedAttempt?.bind(this),
             },
         ).then(async () => {
-            await this.success();
+            await this.finish?.();
 
-            return this.finish?.();
+            return this.success();
         }).catch(this.executeCatcher.bind(this));
     }
 
