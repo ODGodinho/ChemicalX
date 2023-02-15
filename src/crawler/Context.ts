@@ -61,7 +61,7 @@ export abstract class Context<
         ) as unknown as (options: ContextOptionsLibraryInterface) => Promise<ContextClassEngine>;
         contextInstance.$contextInstance = await prepareContext.call($browserInstance.$browserInstance, {
             ...await contextInstance.contextOptions(),
-            $options,
+            ...$options,
         });
 
         return new Proxy(contextInstance, {
