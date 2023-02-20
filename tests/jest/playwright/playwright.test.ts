@@ -14,6 +14,7 @@ import {
 } from "./engine";
 
 import { Browser, Context, Page } from ".";
+import { ExamplePageTwoAttempt } from "../Pages/ExamplePageTwoAttempt";
 
 describe("Example Teste", () => {
     const browser = Browser.create<
@@ -69,6 +70,13 @@ describe("Example Teste", () => {
 
         await expect(basePage2["executeCatcher"](void 0))
             .resolves.toBeUndefined();
+    });
+
+    test("attempt page number", async () => {
+        const basePage2 = new ExamplePageTwoAttempt(page, {});
+        await expect(basePage2.execute()).rejects.toThrowError();
+        expect(basePage2.startFunction)
+            .toBeCalledTimes(2)
     });
 
     test("Test Browser not init", async () => {

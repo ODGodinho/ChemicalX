@@ -57,7 +57,7 @@ export abstract class BasePage<SelectorBaseType, PageClassEngine extends PageEng
     protected async start(callback: FunctionReturnType<PromiseOrSyncType<void>>): Promise<void> {
         return retry(
             {
-                times: await this.attempt() - 1,
+                times: await this.attempt(),
                 sleep: 0,
                 callback: callback,
                 when: this.failedAttempt?.bind(this),
