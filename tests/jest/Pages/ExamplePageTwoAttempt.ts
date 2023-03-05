@@ -11,7 +11,7 @@ export class ExamplePageTwoAttempt extends BasePage<unknown, PageClassEngine & P
 
     public startFunction: () => void;
 
-    constructor(page: PageClassEngine & PageEngineInterface, $$s: unknown) {
+    public constructor(page: PageClassEngine & PageEngineInterface, $$s: unknown) {
         super(page, $$s);
 
         this.startFunction = jest.fn(() => {

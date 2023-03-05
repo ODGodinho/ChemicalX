@@ -55,6 +55,7 @@ export abstract class Context<
             $pageClass,
             $options,
         );
+
         const prepareContext = (
             $browserInstance.$browserInstance.newContext
             ?? $browserInstance.$browserInstance.createIncognitoBrowserContext
