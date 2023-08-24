@@ -1,13 +1,12 @@
 import { type Exception } from "@odg/exception";
 
-import { type RetryAction } from "../../Helpers/retry";
+import { type RetryAction } from "@enums";
 
 export interface PageInterface {
 
     /**
      * Execute step With retry fail and finish
      *
-     * @memberof BasePage
      * @returns {Promise<void>}
      */
     execute(): Promise<void>;
@@ -15,7 +14,6 @@ export interface PageInterface {
     /**
      * Action to do when the page is success
      *
-     * @memberof BasePage
      * @returns {Promise<void>}
      */
     success(): Promise<void>;
@@ -23,7 +21,6 @@ export interface PageInterface {
     /**
      * Action to do when the page failed
      *
-     * @memberof BasePage
      * @param {Exception} exception Exception
      * @param {number} attempt Current attempt
      * @returns {Promise<RetryAction>}
@@ -34,7 +31,6 @@ export interface PageInterface {
      * Called if page execute is failed
      * Add the throw at the end otherwise the page will not transmit your exception
      *
-     * @memberof BasePage
      * @param {Exception} exception Exception
      * @returns {Promise<void>}
      */
@@ -43,7 +39,6 @@ export interface PageInterface {
     /**
      * If the page is finished with success or failure
      *
-     * @memberof BasePage
      * @param {Exception} exception Exception If it ends with failure
      * @returns {Promise<number>}
      */
@@ -52,7 +47,6 @@ export interface PageInterface {
     /**
      * Number of attempt to execute the page
      *
-     * @memberof BasePage
      * @returns {Promise<number>}
      */
     attempt(): Promise<number>;

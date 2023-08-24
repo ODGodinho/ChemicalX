@@ -1,4 +1,5 @@
 import { Exception } from "@odg/exception";
+import { vi, type SpyInstance } from "vitest";
 
 import { HandlerSolution } from "../../..";
 import { type PageClassEngine } from "../playwright/engine";
@@ -7,11 +8,11 @@ import { WithoutFunctionHandler } from "./mock/WithoutFunctionHandler";
 
 describe("Handler success Function", () => {
     let handler: WithoutFunctionHandler;
-    let handlerSolutionMock: jest.SpyInstance<Promise<HandlerSolution>, unknown[]>;
+    let handlerSolutionMock: SpyInstance<unknown[], Promise<HandlerSolution>>;
 
     beforeEach(() => {
         handler = new WithoutFunctionHandler(undefined as unknown as PageClassEngine, {});
-        handlerSolutionMock = jest.spyOn(handler, "testSolution");
+        handlerSolutionMock = vi.spyOn(handler, "testSolution");
     });
 
     test("Test success without optional functions", async () => {

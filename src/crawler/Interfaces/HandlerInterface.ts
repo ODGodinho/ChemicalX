@@ -1,6 +1,6 @@
 import { type Exception } from "@odg/exception";
 
-import { type RetryAction } from "../../Helpers/retry";
+import { type RetryAction } from "@enums";
 
 export type HandlerFunction = () => Promise<HandlerSolution>;
 
@@ -57,7 +57,6 @@ export interface HandlerInterface {
     /**
      * Action to do when the handler is success
      *
-     * @memberof BasePage
      * @returns {Promise<void>}
      */
     success?(): Promise<void>;

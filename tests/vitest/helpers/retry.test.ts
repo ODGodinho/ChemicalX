@@ -1,10 +1,12 @@
 import { Exception } from "@odg/exception";
+import { vi } from "vitest";
 
-import { RetryAction, retry } from "../../../src/Helpers/index";
+import { RetryAction } from "@enums";
+import { retry } from "@helpers";
 
 describe("Retry Test", () => {
     test("Retry 0 times test", async () => {
-        const callback = jest.fn(() => {
+        const callback = vi.fn(() => {
             throw new Error("Example");
         });
 
@@ -16,10 +18,10 @@ describe("Retry Test", () => {
     });
 
     test("Retry Test When Resolve", async () => {
-        const callback = jest.fn(() => {
+        const callback = vi.fn(() => {
             throw new Error("Example");
         });
-        const when = jest.fn(() => RetryAction.Resolve);
+        const when = vi.fn(() => RetryAction.Resolve);
 
         await expect(retry({
             times: 5,
@@ -31,8 +33,8 @@ describe("Retry Test", () => {
     });
 
     test("Retry when not called", async () => {
-        const callback = jest.fn(() => true);
-        const when = jest.fn(() => RetryAction.Default);
+        const callback = vi.fn(() => true);
+        const when = vi.fn(() => RetryAction.Default);
 
         await expect(retry({
             times: 5,
@@ -44,10 +46,10 @@ describe("Retry Test", () => {
     });
 
     test("Retry when Sleep", async () => {
-        const callback = jest.fn(() => {
+        const callback = vi.fn(() => {
             throw new Error("error 2");
         });
-        const when = jest.fn((_exception, times) => {
+        const when = vi.fn((_exception, times) => {
             if (times === 2) {
                 return RetryAction.Throw;
             }
@@ -65,7 +67,7 @@ describe("Retry Test", () => {
     });
 
     test("Retry Unknown Exception", async () => {
-        const callback = jest.fn(() => {
+        const callback = vi.fn(() => {
             throw new Exception("Anything");
         });
 
@@ -76,7 +78,7 @@ describe("Retry Test", () => {
     });
 
     test("Retry Unknown Exception", async () => {
-        const callback = jest.fn((times) => {
+        const callback = vi.fn((times) => {
             if (times === 0) {
                 throw new Exception("error");
             }
@@ -92,7 +94,7 @@ describe("Retry Test", () => {
     });
 
     test("All Retry errors", async () => {
-        const callback = jest.fn(() => {
+        const callback = vi.fn(() => {
             throw new Error("Example");
         });
 
@@ -104,7 +106,7 @@ describe("Retry Test", () => {
     });
 
     test("First Time retry resolve", async () => {
-        const callback = jest.fn(() => {
+        const callback = vi.fn(() => {
             throw new Error("RetryResolve");
         });
 

@@ -1,3 +1,5 @@
+import { vi, type SpyInstance } from "vitest";
+
 import { HandlerSolution } from "../../../src";
 import { type PageClassEngine } from "../playwright/engine";
 
@@ -5,12 +7,12 @@ import { ExampleHandler } from "./mock/ExampleHandler";
 
 describe("Handler Retry tests", () => {
     let handler: ExampleHandler;
-    let handlerSolutionMock: jest.SpyInstance<Promise<HandlerSolution>, unknown[]>;
-    let handlerAttemptMock: jest.SpyInstance<Promise<number>, unknown[]>;
+    let handlerSolutionMock: SpyInstance<unknown[], Promise<HandlerSolution>>;
+    let handlerAttemptMock: SpyInstance<unknown[], Promise<number>>;
     beforeEach(() => {
         handler = new ExampleHandler(undefined as unknown as PageClassEngine, {});
-        handlerSolutionMock = jest.spyOn(handler, "testSolution");
-        handlerAttemptMock = jest.spyOn(handler, "attempt");
+        handlerSolutionMock = vi.spyOn(handler, "testSolution");
+        handlerAttemptMock = vi.spyOn(handler, "attempt");
     });
 
     test("Test Retry Solution 3 times", async () => {

@@ -1,8 +1,8 @@
 /**
  * Is Native Variable
  *
- * @template {any} Type Example number, string, boolean
  * @interface Native
+ * @template {any} Type Example number, string, boolean
  */
 export interface NativeInterface<Type> {
 

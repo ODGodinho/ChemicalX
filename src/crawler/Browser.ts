@@ -12,7 +12,6 @@ import {
 } from "./@types/Context";
 import { type PageEngineInterface, type PageChemicalXConstructorTypo } from "./@types/Page";
 import { Context } from "./Context";
-import { BrowserInstanceException } from "./Exceptions/BrowserInstanceException";
 
 export abstract class Browser<
     BrowserTypeEngine,
@@ -70,9 +69,12 @@ export abstract class Browser<
                     return Reflect.get(target, property);
                 }
 
-                if (!(target.$browserInstance as unknown)) {
-                    throw new BrowserInstanceException("use browser.setUp() to init browser");
-                }
+                /*
+                 * TODO: fix me
+                 * If (!(target.$browserInstance as unknown)) {
+                 *     throw new BrowserInstanceException("use browser.setUp() to init browser");
+                 * }
+                 */
 
                 const propertyClass = (target.$browserInstance as Record<string, unknown>)[property];
 

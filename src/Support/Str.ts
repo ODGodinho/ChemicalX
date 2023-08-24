@@ -53,7 +53,7 @@ export class Str implements CloneableInterface, NativeInterface<string> {
      *
      * @throws {MoneyNotFoundException} If no money value is found
      * @throws {MoneyMultipleResultException} If multiple money values are found
-     * @returns {Num} Num Class with the money value
+     * @returns {Arr<Num[]>} Num Class with the money value
      */
     public moneys(): Arr<Num[]> {
         return new Arr<Num[]>(
@@ -120,7 +120,7 @@ export class Str implements CloneableInterface, NativeInterface<string> {
     /**
      * Convert To Number
      *
-     * @returns {number}
+     * @returns {string}
      */
     public toNative(): string {
         return this.subject;

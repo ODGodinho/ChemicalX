@@ -1,8 +1,14 @@
 import { type Exception, UnknownException } from "@odg/exception";
 
-import { type PageEngineInterface } from "..";
-import { RetryAction, retry } from "../..";
-import { HandlerSolution, type HandlerFunction, type HandlerInterface } from "../Interfaces/HandlerInterface";
+import { RetryAction } from "@enums";
+import { retry } from "@helpers";
+import {
+    HandlerSolution,
+    type HandlerFunction,
+    type HandlerInterface,
+} from "@interfaces";
+
+import { type PageEngineInterface } from "../@types";
 
 export abstract class BaseHandler<
     SelectorBaseType,
@@ -18,26 +24,24 @@ export abstract class BaseHandler<
     /**
      * Called if Handler end with success
      *
-     * @returns {Promise<void>}
      * @memberof BaseHandler
+     * @returns {Promise<void>}
      */
     public success?(): Promise<void>;
 
     /**
      * Called if Handler end with fail or success
      *
+     * @memberof BaseHandler
      * @param {Exception} exception Exception if finish with error
      * @returns {Promise<void>}
-     * @memberof BaseHandler
      */
     public finish?(exception?: Exception): Promise<void>;
 
     /**
      * Execute step With retry fail and finish
      *
-     * @memberof BasePage
-     * @template {any} ReturnType Return Type function
-     * @returns {Promise<ReturnType>}
+     * @returns {Promise<void>}
      */
     public async execute(): Promise<void> {
         try {
@@ -71,11 +75,9 @@ export abstract class BaseHandler<
     /**
      * Called Always handler attempt error.
      *
-     * @protected
      * @param {Exception} _exception Exception error
-     * @param {Exception} _attempt Tentativa Atual
+     * @param {number} _attempt Tentativa Atual
      * @returns {Promise<RetryAction>}
-     * @memberof BaseHandler
      */
     public async failedAttempt(_exception: Exception, _attempt: number): Promise<RetryAction> {
         return RetryAction.Default;
@@ -85,10 +87,10 @@ export abstract class BaseHandler<
      * Called if handler execute is failed
      * Add the throw at the end otherwise the handler will not transmit your exception
      *
+     * @memberof BaseHandler
      * @protected
      * @param {Exception} exception Exception error
      * @returns {Promise<void>}
-     * @memberof BaseHandler
      */
     protected async failedHandler(exception: Exception): Promise<void> {
         throw exception;
@@ -97,9 +99,9 @@ export abstract class BaseHandler<
     /**
      * Wait for handler with Attempt and retry
      *
+     * @memberof BaseHandler
      * @protected
      * @returns {Promise<HandlerSolution | undefined>}
-     * @memberof BaseHandler
      */
     protected async waitHandlerAttempt(): Promise<HandlerSolution | undefined> {
         const handler = await retry({
@@ -115,8 +117,8 @@ export abstract class BaseHandler<
      * Possibility to wait for a handler
      *
      * @abstract
-     * @returns {Promise<HandlerFunction>}
      * @memberof BaseHandler
+     * @returns {Promise<HandlerFunction>}
      */
     public abstract waitForHandler(): Promise<HandlerFunction>;
 
@@ -124,8 +126,8 @@ export abstract class BaseHandler<
      * Number of Attempt to waitForHandler
      *
      * @abstract
-     * @returns {Promise<number>}
      * @memberof BaseHandler
+     * @returns {Promise<number>}
      */
     public abstract attempt(): Promise<number>;
 

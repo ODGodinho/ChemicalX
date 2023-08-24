@@ -1,9 +1,9 @@
 import { type Exception, UnknownException } from "@odg/exception";
 
-import { type RetryAction, retry } from "../..";
+import { type PageInterface, type RetryAction, retry } from "../..";
 import { type FunctionReturnType } from "../../types/FunctionType";
 import { type PromiseOrSyncType } from "../../types/PromiseSyncType";
-import { type PageInterface, type PageEngineInterface } from "../index";
+import { type PageEngineInterface } from "../index";
 import { type SelectorType } from "../Selectors/SelectorsTypo";
 
 export abstract class BasePage<SelectorBaseType, PageClassEngine extends PageEngineInterface> implements PageInterface {
@@ -80,10 +80,10 @@ export abstract class BasePage<SelectorBaseType, PageClassEngine extends PageEng
     /**
      * Selector of this page
      *
-     * @abstract
      * @type {SelectorType}
      * @memberof BasePage
      */
+    // eslint-disable-next-line sort-class-members/sort-class-members
     public abstract readonly $s: SelectorType;
 
     public abstract execute(): Promise<void>;

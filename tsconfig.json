@@ -2,6 +2,17 @@
     "compilerOptions": {
         "baseUrl": ".",
         "outDir": "./dist",
+        "paths": {
+            "#types/*": [ "./src/types/*" ],
+            "@enums": [ "./src/Enums" ],
+            "@enums/*": [ "./src/Enums/*" ],
+            "@exceptions": [ "./src/Exceptions" ],
+            "@exceptions/*": [ "./src/Exceptions/*" ],
+            "@helpers": [ "./src/Helpers" ],
+            "@helpers/*": [ "./src/Helpers/*" ],
+            "@interfaces": [ "./src/Interfaces" ],
+            "@interfaces/*": [ "./src/Interfaces/*" ]
+        },
         "rootDirs": [
             ".",
             "./src"
@@ -9,7 +20,8 @@
         "typeRoots": [
             "./src/@types",
             "node_modules/@types"
-        ]
+        ],
+        "types": [ "node" ]
     },
     "exclude": [
         "node_modules/",

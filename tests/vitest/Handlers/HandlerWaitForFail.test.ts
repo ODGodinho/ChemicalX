@@ -1,4 +1,5 @@
 import { Exception } from "@odg/exception";
+import { vi, type SpyInstance } from "vitest";
 
 import { type HandlerFunction } from "../../..";
 import { type PageClassEngine } from "../playwright/engine";
@@ -7,12 +8,12 @@ import { ExampleHandler } from "./mock/ExampleHandler";
 
 describe("Handler Attempt", () => {
     let handler: ExampleHandler;
-    let handlerWaitMock: jest.SpyInstance<Promise<HandlerFunction>, unknown[]>;
-    let handlerAttemptMock: jest.SpyInstance<Promise<number>, unknown[]>;
+    let handlerWaitMock: SpyInstance<unknown[], Promise<HandlerFunction>>;
+    let handlerAttemptMock: SpyInstance<unknown[], Promise<number>>;
     beforeEach(() => {
         handler = new ExampleHandler(undefined as unknown as PageClassEngine, {});
-        handlerWaitMock = jest.spyOn(handler, "waitForHandler");
-        handlerAttemptMock = jest.spyOn(handler, "attempt");
+        handlerWaitMock = vi.spyOn(handler, "waitForHandler");
+        handlerAttemptMock = vi.spyOn(handler, "attempt");
     });
 
     test("test execute exception", async () => {

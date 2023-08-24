@@ -1,4 +1,5 @@
 import { Exception } from "@odg/exception";
+import { vi } from "vitest";
 
 import {
     BasePage, type PageEngineInterface, type SelectorType,
@@ -14,7 +15,7 @@ export class ExamplePageTwoAttempt extends BasePage<unknown, PageClassEngine & P
     public constructor(page: PageClassEngine & PageEngineInterface, $$s: unknown) {
         super(page, $$s);
 
-        this.startFunction = jest.fn(() => {
+        this.startFunction = vi.fn(() => {
             throw new Exception("Test Finish");
         });
     }

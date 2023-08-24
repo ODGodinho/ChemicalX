@@ -3,9 +3,9 @@ import { type CloneableInterface } from "../Interfaces";
 /**
  * Arr Class Helper
  *
+ * @template {any[]} Type Array Type
  * @class Arr
  * @implements {CloneableInterface}
- * @template {any[]} Type Array Type
  */
 export class Arr<Type extends unknown[]> implements CloneableInterface {
 
@@ -16,8 +16,8 @@ export class Arr<Type extends unknown[]> implements CloneableInterface {
     /**
      * Clone This Object
      *
-     * @returns {Arr<Array<Type[number]>>}
      * @memberof Arr
+     * @returns {Arr<Array<Type[number]>>}
      */
     public clone(): Arr<Array<Type[number]>> {
         return new Arr([ ...this.subject ]);
@@ -26,8 +26,8 @@ export class Arr<Type extends unknown[]> implements CloneableInterface {
     /**
      * Get Array Class Properties
      *
-     * @returns {Type}
      * @memberof Arr
+     * @returns {Type}
      */
     public toArray(): Type {
         return this.subject;

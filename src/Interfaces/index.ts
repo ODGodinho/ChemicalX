@@ -1,2 +1,4 @@
-export * from "./Cloneable";
-export * from "./Native";
+export * from "./CloneableInterface";
+export * from "./NativeInterface";
+export * from "./RetryInterface";
+export * from "../crawler/Interfaces";
