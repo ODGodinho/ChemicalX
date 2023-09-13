@@ -2,6 +2,7 @@ import { Exception } from "@odg/exception";
 import { vi } from "vitest";
 
 import { RetryAction } from "@enums";
+import { RetryException } from "@exceptions/RetryException";
 import { retry } from "@helpers";
 
 describe("Retry Test", () => {
@@ -115,5 +116,17 @@ describe("Retry Test", () => {
             callback: callback,
             when: () => RetryAction.Resolve,
         })).resolves.toBeUndefined();
+    });
+
+    test("Throw if invalid times", async () => {
+        const callback = vi.fn(() => {
+            throw new Error("RetryResolve");
+        });
+
+        await expect(retry({
+            times: undefined as unknown as number,
+            callback: callback,
+            when: () => RetryAction.Resolve,
+        })).rejects.toThrow(RetryException);
     });
 });
