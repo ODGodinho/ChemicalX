@@ -36,7 +36,9 @@ async function getWhen(
 async function retryHelper<ReturnType>(
     options: RetryOptionsInterface<ReturnType> & { attempt: number },
 ): Promise<ReturnType | undefined> {
-    if (typeof options.times !== "number") throw new RetryException("Attempt is not a number");
+    if (typeof options.times !== "number" || Number.isNaN(options.times)) {
+        throw new RetryException("Attempt is not a number");
+    }
 
     try {
         return await options.callback.call(options.callback, options.attempt);
