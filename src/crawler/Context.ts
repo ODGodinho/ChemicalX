@@ -1,7 +1,7 @@
 import { getAccessDecorator } from "@support/Decorators";
 
 import {
-    type BrowserOptionsLibraryInterface,
+    type PageOptionsLibraryInterface,
     type ContextChemicalXInterface,
     type ContextEngineInterface,
     type CreatePageFactoryType,
@@ -23,7 +23,7 @@ export class Context<
 
     }
 
-    public async defaultPageOptions(): Promise<BrowserOptionsLibraryInterface> {
+    public async defaultPageOptions(): Promise<PageOptionsLibraryInterface> {
         return {
         };
     }
