@@ -28,5 +28,4 @@ export type ContextChemicalXConstructorTypo<
 export interface ContextChemicalXInterface<ContextClassEngine extends ContextEngineInterface> {
     $contextInstance: ContextClassEngine;
     newPage: CallableFunction;
-    contextOptions(): Promise<ContextOptionsLibraryInterface>;
 }

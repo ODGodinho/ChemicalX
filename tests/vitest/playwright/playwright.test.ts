@@ -1,4 +1,10 @@
+import { rmdirSync } from "node:fs";
+
 import { Exception } from "@odg/exception";
+import { chromium } from "playwright";
+
+import { type CreateContextFactoryType, type CreatePageFactoryType } from "src";
+import { BrowserManager } from "src";
 
 import { ExamplePage } from "../Pages/ExamplePage";
 import { ExamplePageTwoAttempt } from "../Pages/ExamplePageTwoAttempt";
@@ -6,35 +12,61 @@ import { ExamplePageWithFinish } from "../Pages/ExamplePageWithFinish";
 import { ExamplePageWithoutFinish } from "../Pages/ExamplePageWithoutFinish";
 
 import {
-    type BrowserClassEngine,
-    browserEngine,
-    type BrowserTypeEngine,
-    type ContextClassEngine,
+    type MyPage,
+    type MyContext,
+    type MyBrowser
+    ,
     type PageClassEngine,
 } from "./engine";
 
 import { Browser, Context, Page } from ".";
 
-describe("Example Teste", () => {
-    const browser = Browser.create<
-        BrowserTypeEngine,
-        BrowserClassEngine,
-        ContextClassEngine,
-        PageClassEngine
-    >(
-        browserEngine,
-        Browser,
-        Context,
-        Page,
-    );
+function injectPage(pageEngine: MyPage): Page {
+    return new Page(pageEngine);
+}
 
+function injectContext(contextEngine: MyContext, newPage: CreatePageFactoryType<MyPage>): Context {
+    return new Context(contextEngine, newPage);
+}
+
+function injectBrowser(
+    browserEngine: MyBrowser,
+    newContext: CreateContextFactoryType<MyContext, MyPage>,
+    newPage: CreatePageFactoryType<MyPage>,
+): Browser {
+    return new Browser(browserEngine, newContext, newPage);
+}
+
+describe("Example Teste", () => {
+    const browserManager = new BrowserManager<MyBrowser, MyContext, MyPage>(
+        injectBrowser,
+        injectContext,
+        injectPage,
+    );
+    let browser: MyBrowser;
+    let context: MyContext;
     let page: PageClassEngine;
     beforeAll(async () => {
-        await browser.setUp();
+        browser = await browserManager.newBrowser(async () => chromium.launch({}) as Promise<MyBrowser>);
 
-        const context = await browser.newContext();
-        await expect(context.cookies()).resolves.toEqual([]);
+        context = await browser.newContext();
         page = await context.newPage();
+    });
+
+    test("Page Options", async () => {
+        await expect(context.defaultPageOptions()).resolves.toEqual({});
+        await expect(context.cookies()).resolves.toEqual([]);
+    });
+
+    test("PersistentContext", async () => {
+        const context2 = await browserManager.newPersistentContext(
+            async () => chromium.launchPersistentContext("./temp/") as Promise<MyContext>,
+        );
+        expect(context2).not.toBeUndefined();
+        expect(typeof context2.newPage).toBe("function");
+        await expect(context2.cookies()).resolves.toEqual([]);
+
+        rmdirSync("./temp/", { recursive: true });
     });
 
     test("Teste Instances elements", async () => {
@@ -76,23 +108,6 @@ describe("Example Teste", () => {
         await expect(basePage2.execute()).rejects.toThrowError();
         expect(basePage2.startFunction)
             .toBeCalledTimes(2);
-    });
-
-    test("Test Browser not init", async () => {
-        const browserLocal = Browser.create<
-            BrowserTypeEngine,
-            BrowserClassEngine,
-            ContextClassEngine,
-            PageClassEngine
-        >(
-            browserEngine,
-            Browser,
-            Context,
-            Page,
-        );
-
-        // @FIXME: fix me, error if not init
-        await expect(browserLocal.newContext()).rejects.toThrowError();
     });
 
     test("Close browser", async () => {

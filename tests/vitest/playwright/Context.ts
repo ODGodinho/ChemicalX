@@ -1,22 +1,18 @@
 import { Context as ContextBase, type ContextOptionsLibraryInterface } from "../../../src/crawler";
 
 import {
-    type BrowserClassEngine,
-    type BrowserTypeEngine,
-    type ContextClassEngine,
-    type PageClassEngine,
+    type MyContext,
+    type MyPage,
 } from "./engine";
 
 export class Context extends ContextBase<
-    BrowserTypeEngine,
-    BrowserClassEngine,
-    ContextClassEngine,
-    PageClassEngine
+    MyContext,
+    MyPage
 > {
 
-    public async contextOptions(): Promise<ContextOptionsLibraryInterface> {
+    public async defaultPageOptions(): Promise<ContextOptionsLibraryInterface> {
         return {
-            ...await super.contextOptions(),
+            ...await super.defaultPageOptions(),
         };
     }
 

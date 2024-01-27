@@ -12,11 +12,11 @@ import { type PageEngineInterface } from "../@types";
 
 export abstract class BaseHandler<
     SelectorBaseType,
-    PageClassEngine extends PageEngineInterface,
+    PageEngineType extends PageEngineInterface,
 > implements HandlerInterface {
 
     public constructor(
-        public readonly page: PageClassEngine,
+        public readonly page: PageEngineType,
         public readonly $$s: SelectorBaseType,
     ) {
     }

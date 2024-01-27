@@ -1,28 +1,41 @@
-import { Mouse } from "puppeteer";
+import puppeteer, { Mouse } from "puppeteer";
 
-import {
-    type BrowserClassEngine,
-    browserEngine,
-    type BrowserTypeEngine,
-    type ContextClassEngine,
-    type PageClassEngine,
-} from "./engine";
+import { type CreateContextFactoryType, type CreatePageFactoryType } from "../../../src";
+import { BrowserManager } from "../../../src";
+
+import { type MyBrowser, type MyContext, type MyPage } from "./engine";
 
 import { Browser, Context, Page } from "./index";
 
+function injectPage(pageEngine: MyPage): Page {
+    return new Page(pageEngine);
+}
+
+function injectContext(contextEngine: MyContext, newPage: CreatePageFactoryType<MyPage>): Context {
+    return new Context(contextEngine, newPage);
+}
+
+function injectBrowser(
+    browserEngine: MyBrowser,
+    newContext: CreateContextFactoryType<MyContext, MyPage>,
+    newPage: CreatePageFactoryType<MyPage>,
+): Browser {
+    return new Browser(browserEngine, newContext, newPage);
+}
+
 describe("Example Teste", () => {
+    const browserManager = new BrowserManager<MyBrowser, MyContext, MyPage>(
+        injectBrowser,
+        injectContext,
+        injectPage,
+    );
+    let browser: MyBrowser;
+
     test("Teste Instances elements", async () => {
-        const browser = await Browser.create<
-            BrowserTypeEngine,
-            BrowserClassEngine,
-            ContextClassEngine,
-            PageClassEngine
-        >(
-            browserEngine,
-            Browser,
-            Context,
-            Page,
-        ).setUp();
+        browser = await browserManager.newBrowser(
+            async () => puppeteer.launch({ headless: "new" }) as Promise<MyBrowser>,
+        );
+
         const context = await browser.newContext();
         expect(context.isIncognito()).toEqual(true);
         expect(typeof context.id).toBe("string");
@@ -32,21 +45,5 @@ describe("Example Teste", () => {
         expect(page.mouse).toBeInstanceOf(Mouse);
         expect(page.example()).toEqual(1);
         await browser.close();
-    });
-    test("Test Browser not init", async () => {
-        const browser = Browser.create<
-            BrowserTypeEngine,
-            BrowserClassEngine,
-            ContextClassEngine,
-            PageClassEngine
-        >(
-            browserEngine,
-            Browser,
-            Context,
-            Page,
-        );
-
-        // FIXME: check if not init
-        await expect(browser.newContext()).rejects.toThrowError();
     });
 });

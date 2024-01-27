@@ -36,15 +36,11 @@ export interface BrowserChemicalXInterface<
     BrowserClassEngine extends BrowserEngineInterface,
     ContextClassEngine extends ContextEngineInterface,
 > {
-
     $browserInstance: BrowserClassEngine;
     newContext(
         options?: ContextOptionsLibraryInterface
     ): Promise<ContextChemicalXInterface<ContextClassEngine> & ContextClassEngine>;
-    setUp(): Promise<
-        this
-    >;
-
+    defaultContextOptions(): Promise<ContextOptionsLibraryInterface>;
 }
 
 export type BrowserChemicalXConstructorTypo<

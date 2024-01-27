@@ -4,6 +4,10 @@ import {
 } from "./Browser";
 import { type ContextChemicalXInterface, type ContextEngineInterface } from "./Context";
 
+export interface PageOptionsLibraryInterface {
+
+}
+
 export type PageChemicalXConstructorTypo<
     BrowserTypeEngine,
     BrowserClassEngine extends BrowserEngineInterface,
@@ -17,8 +21,8 @@ export type PageChemicalXConstructorTypo<
     >,
 ) => PageChemicalXInterface<PageClassEngine>;
 
-export interface PageChemicalXInterface<PageClassEngine extends PageEngineInterface> {
-    $pageInstance: PageClassEngine;
+export interface PageChemicalXInterface<PageEngineType extends PageEngineInterface> {
+    $pageInstance: PageEngineType;
 }
 
 export interface PageEngineInterface {

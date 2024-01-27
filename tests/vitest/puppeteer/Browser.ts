@@ -1,34 +1,25 @@
 import {
     Browser as BrowserBase,
-    type BrowserOptionsLibraryInterface,
 } from "../../../src/crawler/index";
 
 import {
-    type BrowserClassEngine,
+    type MyBrowser,
+    type MyContext,
+    type MyPage,
     type BrowserOptionsEngine,
-    type BrowserTypeEngine,
-    type ContextClassEngine,
-    type PageClassEngine,
 } from "./engine";
 
 export class Browser extends BrowserBase<
-    BrowserTypeEngine,
-    BrowserClassEngine,
-    ContextClassEngine,
-    PageClassEngine
+    MyBrowser,
+    MyContext,
+    MyPage
 > {
 
-    public async browserOptions(): Promise<BrowserOptionsEngine & BrowserOptionsLibraryInterface> {
+    public async defaultContextOptions(): Promise<BrowserOptionsEngine> {
         return {
-            ...await super.browserOptions(),
+            ...await super.defaultContextOptions(),
             headless: true,
         };
-    }
-
-    public async setUp(): Promise<this> {
-        this.$browserInstance = await this.$browserEngine.launch(await this.browserOptions());
-
-        return this;
     }
 
 }

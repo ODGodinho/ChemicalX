@@ -1,8 +1,8 @@
 import { type Exception, UnknownException } from "@odg/exception";
 
+import { type PromiseOrSyncType, type FunctionReturnType } from "#types/index";
+
 import { type PageInterface, type RetryAction, retry } from "../..";
-import { type FunctionReturnType } from "../../types/FunctionType";
-import { type PromiseOrSyncType } from "../../types/PromiseSyncType";
 import { type PageEngineInterface } from "../index";
 import { type SelectorType } from "../Selectors/SelectorsTypo";
 

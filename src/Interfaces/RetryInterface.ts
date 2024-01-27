@@ -1,6 +1,6 @@
 import { type Exception } from "@odg/exception";
 
-import { type PromiseOrSyncType } from "#types/PromiseSyncType";
+import { type PromiseOrSyncType } from "#types/index";
 import { type RetryAction } from "@enums";
 
 /**

@@ -1,69 +1,30 @@
 import {
-    type BrowserChemicalXInterface,
-    type BrowserEngineInterface,
-} from "./@types/Browser";
-import {
-    type ContextChemicalXInterface,
-    type ContextEngineInterface,
-} from "./@types/Context";
-import {
-    type PageChemicalXInterface,
-    type PageChemicalXConstructorTypo,
+    type GetterAccessInterface, type PageChemicalXInterface,
     type PageEngineInterface,
-} from "./@types/Page";
+} from "..";
+import { getAccessDecorator } from "..";
 
-export abstract class Page<
-    BrowserTypeEngine,
-    BrowserClassEngine extends BrowserEngineInterface,
-    ContextClassEngine extends ContextEngineInterface,
-    PageClassEngine extends PageEngineInterface,
-> implements PageChemicalXInterface<PageClassEngine> {
-
-    public $pageInstance!: PageClassEngine;
+@getAccessDecorator()
+export class Page<
+    PageEngineType extends PageEngineInterface,
+> implements GetterAccessInterface, PageChemicalXInterface<PageEngineType> {
 
     public constructor(
-        public readonly $browserInstance: BrowserChemicalXInterface<BrowserClassEngine, ContextClassEngine>,
-        public readonly $contextClass: ContextChemicalXInterface<ContextClassEngine>,
-        public readonly $pageClass:
-        PageChemicalXConstructorTypo<BrowserTypeEngine, BrowserClassEngine, ContextClassEngine, PageClassEngine>,
+        public readonly $pageInstance: PageEngineType,
     ) {
+
     }
 
-    public static async create<
-        BrowserTypeEngine,
-        BrowserClassEngine extends BrowserEngineInterface,
-        ContextClassEngine extends ContextEngineInterface,
-        PageClassEngine extends PageEngineInterface,
-    >(
-        $browserInstance: BrowserChemicalXInterface<BrowserClassEngine, ContextClassEngine>,
-        $contextClass: ContextChemicalXInterface<ContextClassEngine>,
-        $pageClass: PageChemicalXConstructorTypo<
-            BrowserTypeEngine, BrowserClassEngine, ContextClassEngine, PageClassEngine
-        >,
-    ): Promise<PageChemicalXInterface<PageClassEngine> & PageClassEngine> {
-        const pageInstance = new $pageClass(
-            $browserInstance,
-            $contextClass,
-            $pageClass,
-        );
-        pageInstance.$pageInstance = await $contextClass.$contextInstance.newPage() as unknown as PageClassEngine;
+    public __get(key: PropertyKey): unknown {
+        if (key in this) {
+            return Reflect.get(this, key);
+        }
 
-        return new Proxy(pageInstance, {
-            get(
-                target: Page<BrowserTypeEngine, BrowserClassEngine, ContextClassEngine, PageClassEngine>,
-                property: string,
-            ): unknown {
-                if (property in target) {
-                    return Reflect.get(target, property);
-                }
+        const propertyClass = (this.$pageInstance as Record<PropertyKey, unknown>)[key];
 
-                const propertyClass = (pageInstance.$pageInstance as Record<string, unknown>)[property];
-
-                return typeof propertyClass === "function"
-                    ? propertyClass.bind(pageInstance.$pageInstance)
-                    : Reflect.get(pageInstance.$pageInstance, property);
-            },
-        }) as PageChemicalXInterface<PageClassEngine> & PageClassEngine;
+        return typeof propertyClass === "function"
+            ? propertyClass.bind(this.$pageInstance)
+            : Reflect.get(this.$pageInstance, key);
     }
 
 }
