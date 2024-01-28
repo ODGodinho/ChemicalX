@@ -64,6 +64,7 @@ describe("Example Teste", () => {
         expect(context2).not.toBeUndefined();
         expect(typeof context2.newPage).toBe("function");
         await expect(context2.cookies()).resolves.toEqual([]);
+        await context2.close();
 
         rmdirSync("./temp/", { recursive: true });
     });
