@@ -1,107 +1,59 @@
-import {
-    type BrowserOptionsLibraryInterface,
-    type BrowserChemicalXInterface,
-    type BrowserChemicalXConstructorTypo,
-    type BrowserEngineInterface,
-} from "./@types/Browser";
-import {
-    type ContextChemicalXInterface,
-    type ContextEngineInterface,
-    type ContextOptionsLibraryInterface,
-    type ContextChemicalXConstructorTypo,
-} from "./@types/Context";
-import { type PageEngineInterface, type PageChemicalXConstructorTypo } from "./@types/Page";
-import { Context } from "./Context";
+import { type GetterAccessInterface } from "@interfaces";
+import { getAccessDecorator } from "@support/Decorators";
 
-export abstract class Browser<
-    BrowserTypeEngine,
-    BrowserClassEngine extends BrowserEngineInterface,
-    ContextClassEngine extends ContextEngineInterface,
-    PageClassEngine extends PageEngineInterface,
-> implements BrowserChemicalXInterface<BrowserClassEngine, ContextClassEngine> {
+import {
+    type BrowserChemicalXInterface, type ContextChemicalXInterface,
+    type ContextEngineInterface, type ContextOptionsLibraryInterface,
+    type PageEngineInterface,
+    CreateContextFactoryType, CreatePageFactoryType, type BrowserEngineInterface,
+} from ".";
 
-    public $browserInstance!: BrowserClassEngine;
+@getAccessDecorator()
+export class Browser<
+    BrowserEngineType extends BrowserEngineInterface,
+    ContextEngineType extends ContextEngineInterface,
+    PageEngineType extends PageEngineInterface,
+> implements GetterAccessInterface, BrowserChemicalXInterface<BrowserEngineType, ContextEngineType> {
 
     public constructor(
-        public readonly $browserEngine: BrowserTypeEngine,
-        public readonly $browserClass: BrowserChemicalXConstructorTypo<
-            BrowserTypeEngine, BrowserClassEngine, ContextClassEngine, PageClassEngine
-        >,
-        public readonly $contextClass: ContextChemicalXConstructorTypo<
-            BrowserTypeEngine, BrowserClassEngine, ContextClassEngine, PageClassEngine
-        >,
-        public readonly $pageClass: PageChemicalXConstructorTypo<
-            BrowserTypeEngine, BrowserClassEngine, ContextClassEngine, PageClassEngine
-        >,
+        public readonly $browserInstance: BrowserEngineType,
+        private readonly $newContext: CreateContextFactoryType<ContextEngineType, PageEngineType>,
+        private readonly $newPage: CreatePageFactoryType<PageEngineType>,
     ) {
+
     }
 
-    public static create<
-        BrowserTypeEngine,
-        BrowserClassEngine extends BrowserEngineInterface,
-        ContextClassEngine extends ContextEngineInterface,
-        PageClassEngine extends PageEngineInterface,
-    >(
-        $browserEngine: BrowserTypeEngine,
-        $browserClass: BrowserChemicalXConstructorTypo<
-            BrowserTypeEngine, BrowserClassEngine, ContextClassEngine, PageClassEngine
-        >,
-        $contextClass: ContextChemicalXConstructorTypo<
-            BrowserTypeEngine, BrowserClassEngine, ContextClassEngine, PageClassEngine
-        >,
-        $pageClass: PageChemicalXConstructorTypo<
-            BrowserTypeEngine, BrowserClassEngine, ContextClassEngine, PageClassEngine
-        >,
-    ): BrowserChemicalXInterface<BrowserClassEngine, ContextClassEngine> & BrowserClassEngine {
-        const browserInstance = new $browserClass(
-            $browserEngine,
-            $browserClass,
-            $contextClass,
-            $pageClass,
-        );
-
-        return new Proxy(browserInstance, {
-            get(
-                target: BrowserChemicalXInterface<BrowserClassEngine, ContextClassEngine>,
-                property: string,
-            ): unknown {
-                if (property in target) {
-                    return Reflect.get(target, property);
-                }
-
-                /*
-                 * TODO: fix me
-                 * If (!(target.$browserInstance as unknown)) {
-                 *     throw new BrowserInstanceException("use browser.setUp() to init browser");
-                 * }
-                 */
-
-                const propertyClass = (target.$browserInstance as Record<string, unknown>)[property];
-
-                return typeof propertyClass === "function"
-                    ? propertyClass.bind(target.$browserInstance)
-                    : Reflect.get(target.$browserInstance, property);
-            },
-        }) as BrowserChemicalXInterface<BrowserClassEngine, ContextClassEngine> & BrowserClassEngine;
-    }
-
-    public async browserOptions(): Promise<BrowserOptionsLibraryInterface> {
+    public async defaultContextOptions(): Promise<ContextOptionsLibraryInterface> {
         return {
-            headless: true,
         };
     }
 
     public async newContext(
         options?: ContextOptionsLibraryInterface,
-    ): Promise<ContextChemicalXInterface<ContextClassEngine> & ContextClassEngine> {
-        return Context.create(
-            this,
-            this.$contextClass,
-            this.$pageClass,
-            options,
-        );
+    ): Promise<ContextChemicalXInterface<ContextEngineType> & ContextEngineType> {
+        const makeContext = (
+            this.$browserInstance.newContext ?? this.$browserInstance.createIncognitoBrowserContext
+        ) as (...arguments_: unknown[]) => Promise<ContextEngineType>;
+
+        return this.$newContext(
+            await makeContext.call(this.$browserInstance, {
+                ...await this.defaultContextOptions(),
+                options,
+            }),
+            this.$newPage,
+        ) as ContextChemicalXInterface<ContextEngineType> & ContextEngineType;
     }
 
-    public abstract setUp(): Promise<this>;
+    public __get(key: PropertyKey): unknown {
+        if (key in this) {
+            return Reflect.get(this, key);
+        }
+
+        const propertyClass = (this.$browserInstance as Record<PropertyKey, unknown>)[key];
+
+        return typeof propertyClass === "function"
+            ? propertyClass.bind(this.$browserInstance)
+            : Reflect.get(this.$browserInstance, key);
+    }
 
 }

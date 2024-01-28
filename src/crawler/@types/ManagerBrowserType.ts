@@ -1,0 +1,29 @@
+import {
+    type BrowserChemicalXInterface, type BrowserEngineInterface,
+    type ContextChemicalXInterface, type ContextEngineInterface,
+    type PageChemicalXInterface, type PageEngineInterface,
+} from "..";
+
+export type CreatePageFactoryType<
+    PageEngineType extends PageEngineInterface,
+> = (
+    page: PageEngineType
+) => PageChemicalXInterface<PageEngineType>;
+
+export type CreateContextFactoryType<
+    ContextEngineType extends ContextEngineInterface,
+    PageEngineType extends PageEngineInterface,
+> = (
+    context: ContextEngineType,
+    newPage: CreatePageFactoryType<PageEngineType>
+) => ContextChemicalXInterface<ContextEngineType>;
+
+export type CreateBrowserFactoryType<
+    BrowserEngineType extends BrowserEngineInterface,
+    ContextEngineType extends ContextEngineInterface,
+    PageEngineType extends PageEngineInterface,
+> = (
+    browser: BrowserEngineType,
+    newContext: CreateContextFactoryType<ContextEngineType, PageEngineType>,
+    newPage: CreatePageFactoryType<PageEngineType>
+) => BrowserChemicalXInterface<BrowserEngineType, ContextEngineType>;

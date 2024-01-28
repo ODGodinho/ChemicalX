@@ -11,7 +11,8 @@
             "@helpers": [ "./src/Helpers" ],
             "@helpers/*": [ "./src/Helpers/*" ],
             "@interfaces": [ "./src/Interfaces" ],
-            "@interfaces/*": [ "./src/Interfaces/*" ]
+            "@interfaces/*": [ "./src/Interfaces/*" ],
+            "@support/*": [ "./src/Support/*" ]
         },
         "rootDirs": [
             ".",

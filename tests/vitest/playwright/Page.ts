@@ -1,18 +1,12 @@
-import { Page as PageBase } from "../../../src/crawler";
+import { type PageChemicalXInterface, Page as PageBase } from "../../../src/crawler";
 
 import {
-    type BrowserClassEngine,
-    type BrowserTypeEngine,
-    type ContextClassEngine,
     type PageClassEngine,
 } from "./engine";
 
 export class Page extends PageBase<
-    BrowserTypeEngine,
-    BrowserClassEngine,
-    ContextClassEngine,
     PageClassEngine
-> {
+> implements PageChemicalXInterface<PageClassEngine> {
 
     public example(): number {
         return 1;
