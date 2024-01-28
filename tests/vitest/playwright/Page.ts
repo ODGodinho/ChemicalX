@@ -1,5 +1,4 @@
-import { type PageChemicalXInterface } from "../../../src/crawler";
-import { Page as PageBase } from "../../../src/crawler";
+import { type PageChemicalXInterface, Page as PageBase } from "../../../src/crawler";
 
 import {
     type PageClassEngine,

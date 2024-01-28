@@ -3,8 +3,7 @@ import { rmdirSync } from "node:fs";
 import { Exception } from "@odg/exception";
 import { chromium } from "playwright";
 
-import { type CreateContextFactoryType, type CreatePageFactoryType } from "src";
-import { BrowserManager } from "src";
+import { type CreateContextFactoryType, type CreatePageFactoryType, BrowserManager } from "src";
 
 import { ExamplePage } from "../Pages/ExamplePage";
 import { ExamplePageTwoAttempt } from "../Pages/ExamplePageTwoAttempt";

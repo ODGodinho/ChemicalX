@@ -32,7 +32,7 @@ export class Browser<
         options?: ContextOptionsLibraryInterface,
     ): Promise<ContextChemicalXInterface<ContextEngineType> & ContextEngineType> {
         const makeContext = (
-            this.$browserInstance.newContext ?? this.$browserInstance.createIncognitoBrowserContext!
+            this.$browserInstance.newContext ?? this.$browserInstance.createIncognitoBrowserContext
         ) as (...arguments_: unknown[]) => Promise<ContextEngineType>;
 
         return this.$newContext(

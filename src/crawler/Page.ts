@@ -1,8 +1,8 @@
 import {
     type GetterAccessInterface, type PageChemicalXInterface,
     type PageEngineInterface,
+    getAccessDecorator,
 } from "..";
-import { getAccessDecorator } from "..";
 
 @getAccessDecorator()
 export class Page<
