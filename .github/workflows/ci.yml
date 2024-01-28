@@ -24,6 +24,8 @@ jobs:
           cache: yarn
       - name: Yarn Install
         run: yarn
+      - name: Playwright Install
+        run: yarn playwright install chromium
       - if: ${{ github.event_name == 'pull_request' }}
         name: Review Dog Pull Request
         uses: reviewdog/action-eslint@v1
