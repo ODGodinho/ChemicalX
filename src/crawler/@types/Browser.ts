@@ -1,13 +1,8 @@
 import {
     type ContextEngineInterface,
-    type ContextChemicalXConstructorTypo,
     type ContextOptionsLibraryInterface,
     type ContextChemicalXInterface,
 } from "./Context";
-import {
-    type PageEngineInterface,
-    type PageChemicalXConstructorTypo,
-} from "./Page";
 
 export interface BrowserOptionsLibraryInterface {
 
@@ -42,21 +37,3 @@ export interface BrowserChemicalXInterface<
     ): Promise<ContextChemicalXInterface<ContextClassEngine> & ContextClassEngine>;
     defaultContextOptions(): Promise<ContextOptionsLibraryInterface>;
 }
-
-export type BrowserChemicalXConstructorTypo<
-    BrowserTypeEngine,
-    BrowserClassEngine extends BrowserEngineInterface,
-    ContextClassEngine extends ContextEngineInterface,
-    PageClassEngine extends PageEngineInterface,
-> = new (
-    $browserEngine: BrowserTypeEngine,
-    $browserClass: BrowserChemicalXConstructorTypo<
-        BrowserTypeEngine, BrowserClassEngine, ContextClassEngine, PageClassEngine
-    >,
-    $contextClass: ContextChemicalXConstructorTypo<
-        BrowserTypeEngine, BrowserClassEngine, ContextClassEngine, PageClassEngine
-    >,
-    $pageClass: PageChemicalXConstructorTypo<
-        BrowserTypeEngine, BrowserClassEngine, ContextClassEngine, PageClassEngine
-    >,
-) => BrowserChemicalXInterface<BrowserClassEngine, ContextClassEngine>;
