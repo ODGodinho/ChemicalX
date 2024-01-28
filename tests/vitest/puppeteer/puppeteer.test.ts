@@ -7,20 +7,20 @@ import { type MyBrowser, type MyContext, type MyPage } from "./engine";
 
 import { Browser, Context, Page } from "./index";
 
-function injectPage(pageEngine: MyPage): Page {
-    return new Page(pageEngine);
+function injectPage(page: MyPage): Page {
+    return new Page(page);
 }
 
-function injectContext(contextEngine: MyContext, newPage: CreatePageFactoryType<MyPage>): Context {
-    return new Context(contextEngine, newPage);
+function injectContext(context: MyContext, newPage: CreatePageFactoryType<MyPage>): Context {
+    return new Context(context, newPage);
 }
 
 function injectBrowser(
-    browserEngine: MyBrowser,
-    newContext: CreateContextFactoryType<MyContext, MyPage>,
+    browser: MyBrowser,
+    newContextE: CreateContextFactoryType<MyContext, MyPage>,
     newPage: CreatePageFactoryType<MyPage>,
 ): Browser {
-    return new Browser(browserEngine, newContext, newPage);
+    return new Browser(browser, newContextE, newPage);
 }
 
 describe("Example Teste", () => {
