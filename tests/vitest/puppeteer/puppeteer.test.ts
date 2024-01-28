@@ -1,7 +1,6 @@
 import puppeteer, { Mouse } from "puppeteer";
 
-import { type CreateContextFactoryType, type CreatePageFactoryType } from "../../../src";
-import { BrowserManager } from "../../../src";
+import { type CreateContextFactoryType, type CreatePageFactoryType, BrowserManager } from "../../../src";
 
 import { type MyBrowser, type MyContext, type MyPage } from "./engine";
 
