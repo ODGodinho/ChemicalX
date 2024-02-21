@@ -34,7 +34,7 @@ export class Context<
         return this.$newPage(
             await this.$contextInstance.newPage(this.$contextInstance, {
                 ...await this.defaultPageOptions(),
-                options,
+                ...options,
             }) as PageEngineType,
         ) as PageChemicalXInterface<PageEngineType> & PageEngineType;
     }
