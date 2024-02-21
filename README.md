@@ -140,7 +140,8 @@ To build the project, you can use the following command
 > if you change files, you need to run `yarn build` and `yarn start` again
 
 ```bash
-yarn build && yarn start
+yarn build
+yarn start
 # or
 yarn dev
 ```
