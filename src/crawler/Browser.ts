@@ -38,7 +38,7 @@ export class Browser<
         return this.$newContext(
             await makeContext.call(this.$browserInstance, {
                 ...await this.defaultContextOptions(),
-                options,
+                ...options,
             }),
             this.$newPage,
         ) as ContextChemicalXInterface<ContextEngineType> & ContextEngineType;
