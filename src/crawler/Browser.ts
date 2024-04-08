@@ -46,6 +46,15 @@ export class Browser<
         ) as ContextChemicalXInterface<ContextEngineType> & ContextEngineType;
     }
 
+    public contexts(): Array<ContextChemicalXInterface<ContextEngineType> & ContextEngineType> {
+        const contexts = (this.$browserInstance.contexts() ?? []) as ContextEngineType[];
+
+        return contexts.map((context) => this.$newContext(
+            context,
+            this.$newPage,
+        ) as ContextChemicalXInterface<ContextEngineType> & ContextEngineType);
+    }
+
     public __get(key: PropertyKey): unknown {
         if (key in this) {
             return Reflect.get(this, key);
