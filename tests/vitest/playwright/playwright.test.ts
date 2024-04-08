@@ -2,6 +2,7 @@ import { rmdirSync } from "node:fs";
 
 import { Exception } from "@odg/exception";
 import { chromium } from "playwright";
+import { vi } from "vitest";
 
 import { type CreateContextFactoryType, type CreatePageFactoryType, BrowserManager } from "src";
 
@@ -44,17 +45,34 @@ describe("Example Teste", () => {
     );
     let browser: MyBrowser;
     let context: MyContext;
+    let contexts: MyContext[];
+    let emptyContext: MyContext[];
     let page: PageClassEngine;
     beforeAll(async () => {
         browser = await browserManager.newBrowser(async () => chromium.launch({}) as Promise<MyBrowser>);
 
+        emptyContext = browser.contexts();
         context = await browser.newContext();
+        contexts = browser.contexts();
         page = await context.newPage();
     });
 
     test("Page Options", async () => {
         await expect(context.defaultPageOptions()).resolves.toEqual({});
         await expect(context.cookies()).resolves.toEqual([]);
+    });
+
+    test("EmptyContext", async () => {
+        expect(contexts).not.toBeUndefined();
+        expect(emptyContext).toEqual([]);
+        expect(contexts !== emptyContext).toBeTruthy();
+        const handlerAttemptMock = vi.spyOn(
+            browser.$browserInstance as unknown as { contexts(): undefined },
+            "contexts",
+        );
+        handlerAttemptMock.mockImplementation(() => void 0);
+
+        expect(browser.contexts()).toEqual([]);
     });
 
     test("PersistentContext", async () => {
