@@ -39,6 +39,14 @@ export class Context<
         ) as PageChemicalXInterface<PageEngineType> & PageEngineType;
     }
 
+    public pages(): Array<PageChemicalXInterface<PageEngineType> & PageEngineType> {
+        const pages = (this.$contextInstance.pages() || []) as PageEngineType[];
+
+        return pages.map((page) => this.$newPage(
+            page,
+        ) as PageChemicalXInterface<PageEngineType> & PageEngineType);
+    }
+
     public __get(key: PropertyKey): unknown {
         if (key in this) {
             return Reflect.get(this, key);
