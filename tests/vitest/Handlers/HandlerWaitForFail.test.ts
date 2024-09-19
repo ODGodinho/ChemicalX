@@ -1,5 +1,5 @@
 import { Exception } from "@odg/exception";
-import { vi, type SpyInstance } from "vitest";
+import { vi, type MockInstance } from "vitest";
 
 import { type HandlerFunction } from "../../..";
 import { type PageClassEngine } from "../playwright/engine";
@@ -8,8 +8,8 @@ import { ExampleHandler } from "./mock/ExampleHandler";
 
 describe("Handler Attempt", () => {
     let handler: ExampleHandler;
-    let handlerWaitMock: SpyInstance<unknown[], Promise<HandlerFunction>>;
-    let handlerAttemptMock: SpyInstance<unknown[], Promise<number>>;
+    let handlerWaitMock: MockInstance<unknown[], Promise<HandlerFunction>>;
+    let handlerAttemptMock: MockInstance<unknown[], Promise<number>>;
     beforeEach(() => {
         handler = new ExampleHandler(undefined as unknown as PageClassEngine, {});
         handlerWaitMock = vi.spyOn(handler, "waitForHandler");

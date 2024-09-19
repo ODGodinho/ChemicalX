@@ -1,4 +1,4 @@
-import { vi, type SpyInstance } from "vitest";
+import { vi, type MockInstance } from "vitest";
 
 import { type PageClassEngine } from "../playwright/engine";
 
@@ -6,7 +6,7 @@ import { FailedIgnoreHandler } from "./mock/FailedIgnoreHandler";
 
 describe("Handler Attempt", () => {
     let handler: FailedIgnoreHandler;
-    let handlerAttemptMock: SpyInstance<unknown[], Promise<number>>;
+    let handlerAttemptMock: MockInstance<unknown[], Promise<number>>;
     beforeEach(() => {
         handler = new FailedIgnoreHandler(undefined as unknown as PageClassEngine, {});
         handlerAttemptMock = vi.spyOn(handler, "attempt");

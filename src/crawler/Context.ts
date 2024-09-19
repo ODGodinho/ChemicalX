@@ -18,7 +18,7 @@ export class Context<
 
     public constructor(
         public readonly $contextInstance: ContextEngineType,
-        public readonly $newPage: CreatePageFactoryType<PageEngineType>,
+        public readonly $newPage: CreatePageFactoryType<ContextChemicalXInterface<ContextEngineType>, PageEngineType>,
     ) {
 
     }
@@ -32,6 +32,7 @@ export class Context<
         options?: Record<string, unknown>,
     ): Promise<PageChemicalXInterface<PageEngineType> & PageEngineType> {
         return this.$newPage(
+            this,
             await this.$contextInstance.newPage(this.$contextInstance, {
                 ...await this.defaultPageOptions(),
                 ...options,
@@ -40,9 +41,10 @@ export class Context<
     }
 
     public pages(): Array<PageChemicalXInterface<PageEngineType> & PageEngineType> {
-        const pages = (this.$contextInstance.pages() || []) as PageEngineType[];
+        const pages = this.$contextInstance.pages() as PageEngineType[];
 
         return pages.map((page) => this.$newPage(
+            this,
             page,
         ) as PageChemicalXInterface<PageEngineType> & PageEngineType);
     }

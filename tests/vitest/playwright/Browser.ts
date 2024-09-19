@@ -1,17 +1,16 @@
 import { Browser as BrowserBase } from "../../../src/crawler/index";
 
 import {
-    type MyBrowser,
-    type MyContext,
-    type MyPage,
-
     type BrowserOptionsEngine,
+    type BrowserClassEngine,
+    type ContextClassEngine,
+    type PageClassEngine,
 } from "./engine";
 
 export class Browser extends BrowserBase<
-    MyBrowser,
-    MyContext,
-    MyPage
+    BrowserClassEngine,
+    ContextClassEngine,
+    PageClassEngine
 > {
 
     public async defaultContextOptions(): Promise<BrowserOptionsEngine> {

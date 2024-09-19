@@ -3,16 +3,17 @@ import {
 } from "../../../src/crawler/index";
 
 import {
-    type MyBrowser,
-    type MyContext,
-    type MyPage,
+    type BrowserClassEngine,
+    type PageClassEngine,
+    type ContextClassEngine,
+
     type BrowserOptionsEngine,
 } from "./engine";
 
 export class Browser extends BrowserBase<
-    MyBrowser,
-    MyContext,
-    MyPage
+    BrowserClassEngine,
+    ContextClassEngine,
+    PageClassEngine
 > {
 
     public async defaultContextOptions(): Promise<BrowserOptionsEngine> {

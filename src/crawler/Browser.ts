@@ -18,7 +18,7 @@ export class Browser<
     public constructor(
         public readonly $browserInstance: BrowserEngineType,
         private readonly $newContext: CreateContextFactoryType<ContextEngineType, PageEngineType>,
-        private readonly $newPage: CreatePageFactoryType<PageEngineType>,
+        private readonly $newPage: CreatePageFactoryType<ContextChemicalXInterface<ContextEngineType>, PageEngineType>,
     ) {
 
     }
@@ -47,7 +47,10 @@ export class Browser<
     }
 
     public contexts(): Array<ContextChemicalXInterface<ContextEngineType> & ContextEngineType> {
-        const contexts = (this.$browserInstance.contexts() || []) as ContextEngineType[];
+        const defaultContext = "contexts" in this.$browserInstance
+            && typeof this.$browserInstance.contexts === "function"
+            && this.$browserInstance.contexts() as ContextEngineType[];
+        const contexts = defaultContext || [];
 
         return contexts.map((context) => this.$newContext(
             context,

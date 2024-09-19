@@ -5,8 +5,10 @@ import {
 } from "..";
 
 export type CreatePageFactoryType<
+    ContextEngineType extends ContextChemicalXInterface<ContextEngineInterface>,
     PageEngineType extends PageEngineInterface,
 > = (
+    context: ContextEngineType,
     page: PageEngineType
 ) => PageChemicalXInterface<PageEngineType>;
 
@@ -15,7 +17,7 @@ export type CreateContextFactoryType<
     PageEngineType extends PageEngineInterface,
 > = (
     context: ContextEngineType,
-    newPage: CreatePageFactoryType<PageEngineType>
+    newPage: CreatePageFactoryType<ContextChemicalXInterface<ContextEngineType>, PageEngineType>
 ) => ContextChemicalXInterface<ContextEngineType>;
 
 export type CreateBrowserFactoryType<
@@ -25,5 +27,5 @@ export type CreateBrowserFactoryType<
 > = (
     browser: BrowserEngineType,
     newContext: CreateContextFactoryType<ContextEngineType, PageEngineType>,
-    newPage: CreatePageFactoryType<PageEngineType>
+    newPage: CreatePageFactoryType<ContextChemicalXInterface<ContextEngineType>, PageEngineType>
 ) => BrowserChemicalXInterface<BrowserEngineType, ContextEngineType>;

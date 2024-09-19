@@ -1,4 +1,4 @@
-import { vi, type SpyInstance } from "vitest";
+import { vi, type MockInstance } from "vitest";
 
 import { HandlerSolution } from "../../../src";
 import { type PageClassEngine } from "../playwright/engine";
@@ -7,8 +7,8 @@ import { ExampleHandler } from "./mock/ExampleHandler";
 
 describe("Handler Retry tests", () => {
     let handler: ExampleHandler;
-    let handlerSolutionMock: SpyInstance<unknown[], Promise<HandlerSolution>>;
-    let handlerAttemptMock: SpyInstance<unknown[], Promise<number>>;
+    let handlerSolutionMock: MockInstance<unknown[], Promise<HandlerSolution>>;
+    let handlerAttemptMock: MockInstance<unknown[], Promise<number>>;
     beforeEach(() => {
         handler = new ExampleHandler(undefined as unknown as PageClassEngine, {});
         handlerSolutionMock = vi.spyOn(handler, "testSolution");

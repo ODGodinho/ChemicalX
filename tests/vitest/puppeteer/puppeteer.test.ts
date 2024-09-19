@@ -1,42 +1,51 @@
 import puppeteer, { Mouse } from "puppeteer";
 
-import { type CreateContextFactoryType, type CreatePageFactoryType, BrowserManager } from "../../../src";
+import {
+    type ContextChemicalXInterface, type CreateContextFactoryType, type CreatePageFactoryType, BrowserManager,
+} from "../../../src";
 
-import { type MyBrowser, type MyContext, type MyPage } from "./engine";
+import {
+    type BrowserClassEngine, type ContextClassEngine, type MyBrowser, type PageClassEngine,
+} from "./engine";
 
 import { Browser, Context, Page } from "./index";
 
-function injectPage(page: MyPage): Page {
-    return new Page(page);
+function injectPage(context: ContextChemicalXInterface<ContextClassEngine>, page: PageClassEngine): Page {
+    return new Page(context, page);
 }
 
-function injectContext(context: MyContext, newPage: CreatePageFactoryType<MyPage>): Context {
+function injectContext(
+    context: ContextClassEngine,
+    newPage: CreatePageFactoryType<ContextChemicalXInterface<ContextClassEngine>, PageClassEngine>,
+): Context {
     return new Context(context, newPage);
 }
 
 function injectBrowser(
-    browser: MyBrowser,
-    newContextE: CreateContextFactoryType<MyContext, MyPage>,
-    newPage: CreatePageFactoryType<MyPage>,
+    browser: BrowserClassEngine,
+    newContextE: CreateContextFactoryType<ContextClassEngine, PageClassEngine>,
+    newPage: CreatePageFactoryType<ContextChemicalXInterface<ContextClassEngine>, PageClassEngine>,
 ): Browser {
     return new Browser(browser, newContextE, newPage);
 }
 
 describe("Example Teste", () => {
-    const browserManager = new BrowserManager<MyBrowser, MyContext, MyPage>(
+    const browserManager = new BrowserManager<BrowserClassEngine, ContextClassEngine, PageClassEngine>(
         injectBrowser,
         injectContext,
         injectPage,
     );
     let browser: MyBrowser;
 
-    test("Teste Instances elements", async () => {
+    beforeAll(async () => {
         browser = await browserManager.newBrowser(
-            async () => puppeteer.launch({ headless: "new" }) as Promise<MyBrowser>,
-        );
+            async () => puppeteer.launch({ headless: true }),
+        ) as MyBrowser;
+    });
 
+    test("Teste Instances elements", async () => {
         const context = await browser.newContext();
-        expect(context.isIncognito()).toEqual(true);
+        expect(context.closed).toEqual(false);
         expect(typeof context.id).toBe("string");
         const page = await context.newPage();
         await page.goto("https://www.google.com");

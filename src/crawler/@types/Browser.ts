@@ -24,7 +24,6 @@ export interface BrowserOptionsLibraryInterface {
 
 export interface BrowserEngineInterface {
     newContext?: CallableFunction;
-    contexts: CallableFunction;
     createIncognitoBrowserContext?: CallableFunction;
     createBrowserContext?: CallableFunction;
 }

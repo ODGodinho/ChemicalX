@@ -1,5 +1,5 @@
 import { Exception } from "@odg/exception";
-import { vi, type SpyInstance } from "vitest";
+import { vi, type MockInstance } from "vitest";
 
 import { HandlerSolution } from "../../..";
 import { type PageClassEngine } from "../playwright/engine";
@@ -8,7 +8,7 @@ import { WithoutFunctionHandler } from "./mock/WithoutFunctionHandler";
 
 describe("Handler success Function", () => {
     let handler: WithoutFunctionHandler;
-    let handlerSolutionMock: SpyInstance<unknown[], Promise<HandlerSolution>>;
+    let handlerSolutionMock: MockInstance<unknown[], Promise<HandlerSolution>>;
 
     beforeEach(() => {
         handler = new WithoutFunctionHandler(undefined as unknown as PageClassEngine, {});

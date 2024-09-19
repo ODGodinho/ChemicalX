@@ -18,7 +18,7 @@ export class BrowserManager<
     public constructor(
         private readonly $newBrowser: CreateBrowserFactoryType<BrowserEngineType, ContextEngineType, PageEngineType>,
         private readonly $newContext: CreateContextFactoryType<ContextEngineType, PageEngineType>,
-        private readonly $newPage: CreatePageFactoryType<PageEngineType>,
+        private readonly $newPage: CreatePageFactoryType<ContextChemicalXInterface<ContextEngineType>, PageEngineType>,
     ) {
     }
 

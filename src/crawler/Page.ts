@@ -1,4 +1,6 @@
 import {
+    ContextChemicalXInterface,
+    ContextEngineInterface,
     type GetterAccessInterface, type PageChemicalXInterface,
     type PageEngineInterface,
     getAccessDecorator,
@@ -6,13 +8,19 @@ import {
 
 @getAccessDecorator()
 export class Page<
+    ContextEngineType extends ContextEngineInterface,
     PageEngineType extends PageEngineInterface,
 > implements GetterAccessInterface, PageChemicalXInterface<PageEngineType> {
 
     public constructor(
+        public readonly $context: ContextChemicalXInterface<ContextEngineType>,
         public readonly $pageInstance: PageEngineType,
     ) {
 
+    }
+
+    public context(): ContextChemicalXInterface<ContextEngineType> {
+        return this.$context;
     }
 
     public __get(key: PropertyKey): unknown {

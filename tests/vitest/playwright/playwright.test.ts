@@ -4,7 +4,9 @@ import { Exception } from "@odg/exception";
 import { chromium } from "playwright";
 import { vi } from "vitest";
 
-import { type CreateContextFactoryType, type CreatePageFactoryType, BrowserManager } from "src";
+import {
+    type ContextChemicalXInterface, type CreateContextFactoryType, type CreatePageFactoryType, BrowserManager,
+} from "src";
 
 import { ExamplePage } from "../Pages/ExamplePage";
 import { ExamplePageTwoAttempt } from "../Pages/ExamplePageTwoAttempt";
@@ -12,33 +14,38 @@ import { ExamplePageWithFinish } from "../Pages/ExamplePageWithFinish";
 import { ExamplePageWithoutFinish } from "../Pages/ExamplePageWithoutFinish";
 
 import {
+    type ContextClassEngine,
+    type BrowserClassEngine,
+
     type MyPage,
     type MyContext,
-    type MyBrowser
-    ,
+    type MyBrowser,
     type PageClassEngine,
 } from "./engine";
 
 import { Browser, Context, Page } from ".";
 
-function injectPage(pageEngine: MyPage): Page {
-    return new Page(pageEngine);
+function injectPage(context: ContextChemicalXInterface<ContextClassEngine>, pageEngine: PageClassEngine): Page {
+    return new Page(context, pageEngine);
 }
 
-function injectContext(contextEngine: MyContext, newPage: CreatePageFactoryType<MyPage>): Context {
+function injectContext(
+    contextEngine: ContextClassEngine,
+    newPage: CreatePageFactoryType<ContextChemicalXInterface<ContextClassEngine>, PageClassEngine>,
+): Context {
     return new Context(contextEngine, newPage);
 }
 
 function injectBrowser(
-    browserEngine: MyBrowser,
-    newContext: CreateContextFactoryType<MyContext, MyPage>,
-    newPage: CreatePageFactoryType<MyPage>,
+    browserEngine: BrowserClassEngine,
+    newContext: CreateContextFactoryType<ContextClassEngine, PageClassEngine>,
+    newPage: CreatePageFactoryType<ContextChemicalXInterface<ContextClassEngine>, PageClassEngine>,
 ): Browser {
     return new Browser(browserEngine, newContext, newPage);
 }
 
 describe("Example Teste", () => {
-    const browserManager = new BrowserManager<MyBrowser, MyContext, MyPage>(
+    const browserManager = new BrowserManager<BrowserClassEngine, ContextClassEngine, PageClassEngine>(
         injectBrowser,
         injectContext,
         injectPage,
@@ -47,14 +54,26 @@ describe("Example Teste", () => {
     let context: MyContext;
     let contexts: MyContext[];
     let emptyContext: MyContext[];
-    let page: PageClassEngine;
+    let page: MyPage;
     beforeAll(async () => {
-        browser = await browserManager.newBrowser(async () => chromium.launch({}) as Promise<MyBrowser>);
+        browser = await browserManager.newBrowser(async () => chromium.launch({})) as MyBrowser;
 
-        emptyContext = browser.contexts();
-        context = await browser.newContext();
-        contexts = browser.contexts();
-        page = await context.newPage();
+        emptyContext = browser.contexts() as MyContext[];
+        context = await browser.newContext() as MyContext;
+        contexts = browser.contexts() as MyContext[];
+        page = await context.newPage() as MyPage;
+    });
+
+    test("Page Empty", async () => {
+        const newContext = await browser.newContext();
+        expect(newContext.pages().length).toEqual(0);
+    });
+
+    test("Page Count", async () => {
+        const newPage = await context.newPage();
+        expect(context.pages().length).toEqual(2);
+        await newPage.close();
+        expect(context.pages().length).toEqual(1);
     });
 
     test("Page Options", async () => {
