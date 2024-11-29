@@ -59,7 +59,7 @@
         "@odg/eslint-config": "*",
         "@odg/tsconfig": "*",
         "@types/node": ">=20",
-        "@vitest/coverage-v8": "^1",
+        "@vitest/coverage-istanbul": "^1",
         "concurrently": "^9.0.1",
         "husky": "^9.1.6",
         "lint-staged": "^15.2.10",
@@ -73,5 +73,9 @@
     },
     "dependencies": {
         "@odg/exception": "*"
+    },
+    "optionalDependencies": {
+        "inversify": "^6.1.4",
+        "reflect-metadata": "^0.2.2"
     }
 }

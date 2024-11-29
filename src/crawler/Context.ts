@@ -33,15 +33,18 @@ export class Context<
     ): Promise<PageChemicalXInterface<PageEngineType> & PageEngineType> {
         return this.$newPage(
             this,
-            await this.$contextInstance.newPage(this.$contextInstance, {
-                ...await this.defaultPageOptions(),
-                ...options,
-            }) as PageEngineType,
+            await (this.$contextInstance.newPage as (...itens: unknown[]) => Promise<PageEngineType>)(
+                this.$contextInstance,
+                {
+                    ...await this.defaultPageOptions(),
+                    ...options,
+                },
+            ),
         ) as PageChemicalXInterface<PageEngineType> & PageEngineType;
     }
 
     public pages(): Array<PageChemicalXInterface<PageEngineType> & PageEngineType> {
-        const pages = this.$contextInstance.pages() as PageEngineType[];
+        const pages = (this.$contextInstance.pages as () => PageEngineType[])();
 
         return pages.map((page) => this.$newPage(
             this,

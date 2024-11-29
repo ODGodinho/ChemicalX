@@ -8,8 +8,8 @@ export * from "./Page";
 
 export * from "./Handlers";
 
-export * from "./@types";
+export type * from "./@types";
 
 export * from "./Pages";
 
-export * from "./Selectors/SelectorsTypo";
+export type * from "./Selectors/SelectorsType";

@@ -49,7 +49,7 @@ export class Browser<
     public contexts(): Array<ContextChemicalXInterface<ContextEngineType> & ContextEngineType> {
         const defaultContext = "contexts" in this.$browserInstance
             && typeof this.$browserInstance.contexts === "function"
-            && this.$browserInstance.contexts() as ContextEngineType[];
+            && (this.$browserInstance.contexts as () => ContextEngineType[])();
         const contexts = defaultContext || [];
 
         return contexts.map((context) => this.$newContext(

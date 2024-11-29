@@ -1,3 +1,3 @@
-export * from "./PageInterface";
+export type * from "./PageInterface";
 
 export * from "./HandlerInterface";

@@ -1,7 +1,7 @@
-export * from "./Browser";
+export type * from "./Browser";
 
-export * from "./Context";
+export type * from "./Context";
 
-export * from "./Page";
+export type * from "./Page";
 
-export * from "./ManagerBrowserType";
+export type * from "./ManagerBrowserType";

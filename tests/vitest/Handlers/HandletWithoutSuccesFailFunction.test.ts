@@ -1,7 +1,8 @@
 import { Exception } from "@odg/exception";
 import { vi, type MockInstance } from "vitest";
 
-import { HandlerSolution } from "../../..";
+import { HandlerSolution } from "@interfaces";
+
 import { type PageClassEngine } from "../playwright/engine";
 
 import { WithoutFunctionHandler } from "./mock/WithoutFunctionHandler";

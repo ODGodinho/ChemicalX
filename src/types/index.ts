@@ -1,5 +1,5 @@
-export * from "./FunctionType";
+export type * from "./FunctionType";
 
-export * from "./PromiseSyncType";
+export type * from "./PromiseSyncType";
 
-export * from "../crawler/@types";
+export type * from "../crawler/@types";

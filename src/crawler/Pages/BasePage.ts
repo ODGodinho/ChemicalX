@@ -4,7 +4,7 @@ import { type PromiseOrSyncType, type FunctionReturnType } from "#types/index";
 
 import { type PageInterface, type RetryAction, retry } from "../..";
 import { type PageEngineInterface } from "../index";
-import { type SelectorType } from "../Selectors/SelectorsTypo";
+import { type SelectorType } from "../Selectors/SelectorsType";
 
 export abstract class BasePage<SelectorBaseType, PageClassEngine extends PageEngineInterface> implements PageInterface {
 

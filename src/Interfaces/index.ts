@@ -1,11 +1,11 @@
-export * from "./CloneableInterface";
+export type * from "./CloneableInterface";
 
-export * from "./NativeInterface";
+export type * from "./NativeInterface";
 
-export * from "./RetryInterface";
+export type * from "./RetryInterface";
 
-export * from "./GetterInterface";
+export type * from "./GetterInterface";
 
-export * from "./TimeoutInterface";
+export type * from "./TimeoutInterface";
 
 export * from "../crawler/Interfaces";
