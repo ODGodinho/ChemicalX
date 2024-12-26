@@ -118,6 +118,19 @@ export class Str implements CloneableInterface, NativeInterface<string> {
     }
 
     /**
+     * Make a string's first character uppercase.
+     *
+     * @returns {boolean}
+     */
+    public isJson(): boolean {
+        try {
+            return Boolean(this.subject && JSON.parse(this.subject));
+        } catch {
+            return false;
+        }
+    }
+
+    /**
      * Convert To Number
      *
      * @returns {string}
