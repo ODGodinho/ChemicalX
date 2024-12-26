@@ -39,7 +39,7 @@ describe("Example Teste", () => {
 
     beforeAll(async () => {
         browser = await browserManager.newBrowser(
-            async () => puppeteer.launch({ headless: true }),
+            async () => puppeteer.launch({ headless: true, args: [ "--no-sandbox" ] }),
         ) as MyBrowser;
     });
 
