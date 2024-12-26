@@ -1,4 +1,4 @@
-import { rmdirSync } from "node:fs";
+import { rmSync } from "node:fs";
 
 import { Exception } from "@odg/exception";
 import { chromium } from "playwright";
@@ -103,7 +103,7 @@ describe("Example Teste", () => {
         await expect(context2.cookies()).resolves.toEqual([]);
         await context2.close();
 
-        rmdirSync("./temp/", { recursive: true });
+        rmSync("./temp/", { recursive: true });
     });
 
     test("Teste Instances elements", async () => {

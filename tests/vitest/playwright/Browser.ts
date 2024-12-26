@@ -17,6 +17,7 @@ export class Browser extends BrowserBase<
         return {
             ...await super.defaultContextOptions(),
             headless: true,
+            args: [ "--no-sandbox" ],
         };
     }
 
