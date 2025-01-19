@@ -75,6 +75,7 @@
         "@odg/exception": "*"
     },
     "optionalDependencies": {
+        "@odg/events": "^1.2.0",
         "inversify": "^6.1.4",
         "reflect-metadata": "^0.2.2"
     }

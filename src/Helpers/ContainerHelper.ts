@@ -1,15 +1,23 @@
 import {
+    type EventListener,
+    type EventListenerNotation, type EventObjectType,
+    type EventNameType, type EventOptions,
+} from "@odg/events";
+import {
     type Container, ContainerModule,
     decorate,
     injectable,
 } from "inversify";
 
 import { type ContainerMetadataInterface } from "../Interfaces/internal/ContainerInterface";
+
 import "reflect-metadata";
 
 export class ContainerHelper {
 
     protected static readonly metaData: string = "odg:bind-page-metadata";
+
+    protected static readonly metaDataEvent: string = "odg:bind-events-metadata";
 
     public static injectablePage(name: string): CallableFunction {
         return (target: object) => {
@@ -22,6 +30,36 @@ export class ContainerHelper {
             }, ...previousMetadata ?? [] ];
             Reflect.defineMetadata(ContainerHelper.metaData, newMetadata, Reflect);
         };
+    }
+
+    public static registerListener(
+        eventName: EventNameType,
+        containerName: string,
+        options: EventOptions,
+    ): CallableFunction {
+        return () => {
+            const previousMetadata = this.getReflectEvents();
+            previousMetadata[eventName] ??= [];
+            previousMetadata[eventName].push({
+                containerName: containerName,
+                options: options,
+            });
+
+            Reflect.defineMetadata(ContainerHelper.metaDataEvent, previousMetadata, Reflect);
+        };
+    }
+
+    public static getEvents<Events extends EventObjectType>(
+        containerInstance: Container,
+    ): EventListener<Events, keyof Events> {
+        const allEvents = this.getReflectEvents();
+        for (const [ , listeners ] of Object.entries(allEvents)) {
+            for (const listener of listeners) {
+                listener.listener = containerInstance.get(listener.containerName);
+            }
+        }
+
+        return allEvents as EventListener<Events, keyof Events>;
     }
 
     public static loadModule(containerInstance: Container): ContainerModule {
@@ -48,6 +86,18 @@ export class ContainerHelper {
 
             return value;
         };
+    }
+
+    private static getReflectEvents<Events extends EventObjectType>(): EventListenerNotation<Events, keyof Events> {
+        const defaultItens = {} as unknown as EventListenerNotation<
+            Events,
+            keyof Events
+        >;
+
+        return Reflect.getMetadata(ContainerHelper.metaDataEvent, Reflect) as EventListenerNotation<
+            Events,
+            keyof Events
+        > | undefined ?? defaultItens;
     }
 
 }
