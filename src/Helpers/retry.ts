@@ -71,6 +71,6 @@ export async function retry<ReturnType>(
 ): Promise<ReturnType | undefined> {
     return retryHelper({
         ...options,
-        attempt: 0,
+        attempt: 1,
     });
 }

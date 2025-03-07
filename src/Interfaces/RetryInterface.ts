@@ -34,7 +34,18 @@ export interface RetryOptionsInterface<ReturnType = undefined> {
      *
      * @memberof RetryOptionsInterface
      */
-    callback(attempt: number): PromiseOrSyncType<ReturnType>;
+    callback(
+
+        /**
+         * Current attempt
+         *
+         * Attempt start in 1 end in max times
+         * Min: 1
+         * Max: Last attempt
+         */
+        attempt: number,
+
+    ): PromiseOrSyncType<ReturnType>;
 
 }
 

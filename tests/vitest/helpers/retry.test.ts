@@ -51,7 +51,7 @@ describe("Retry Test", () => {
             throw new Error("error 2");
         });
         const when = vi.fn((_exception, times) => {
-            if (times === 2) {
+            if (times === 3) {
                 return RetryAction.Throw;
             }
 
@@ -80,7 +80,7 @@ describe("Retry Test", () => {
 
     test("Retry Unknown Exception", async () => {
         const callback = vi.fn((times) => {
-            if (times === 0) {
+            if (times === 1) {
                 throw new Exception("error");
             }
         });
