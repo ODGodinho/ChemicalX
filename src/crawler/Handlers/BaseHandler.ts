@@ -1,6 +1,6 @@
 import { type Exception, UnknownException } from "@odg/exception";
 
-import { RetryAction } from "@enums";
+import { type RetryAction } from "@enums";
 import { retry } from "@helpers";
 import {
     HandlerSolution,
@@ -39,6 +39,26 @@ export abstract class BaseHandler<
     public finish?(exception?: Exception): Promise<void>;
 
     /**
+     * Called Always handler attempt error.
+     *
+     * @param {Exception} _exception Exception error
+     * @param {number} _attempt Tentativa Atual
+     * @returns {Promise<RetryAction>}
+     */
+    public failedAttempt?(_exception: Exception, _attempt: number): Promise<RetryAction>;
+
+    /**
+     * Called if handler execute is failed
+     * Add the throw at the end otherwise the handler will not transmit your exception
+     *
+     * @memberof BaseHandler
+     * @protected
+     * @param {Exception} _exception Exception error
+     * @returns {Promise<void>}
+     */
+    public failedHandler?(_exception: Exception): Promise<void>;
+
+    /**
      * Execute step With retry fail and finish
      *
      * @returns {Promise<void>}
@@ -59,7 +79,8 @@ export abstract class BaseHandler<
             const exception = UnknownException.parseOrDefault(error, "Handler UnknownException");
 
             await this.finish?.(exception);
-            await this.failedHandler(exception);
+            if (this.failedHandler) await this.failedHandler(exception);
+            else throw exception;
         }
     }
 
@@ -73,30 +94,6 @@ export abstract class BaseHandler<
     }
 
     /**
-     * Called Always handler attempt error.
-     *
-     * @param {Exception} _exception Exception error
-     * @param {number} _attempt Tentativa Atual
-     * @returns {Promise<RetryAction>}
-     */
-    public async failedAttempt(_exception: Exception, _attempt: number): Promise<RetryAction> {
-        return RetryAction.Default;
-    }
-
-    /**
-     * Called if handler execute is failed
-     * Add the throw at the end otherwise the handler will not transmit your exception
-     *
-     * @memberof BaseHandler
-     * @protected
-     * @param {Exception} exception Exception error
-     * @returns {Promise<void>}
-     */
-    protected async failedHandler(exception: Exception): Promise<void> {
-        throw exception;
-    }
-
-    /**
      * Wait for handler with Attempt and retry
      *
      * @memberof BaseHandler
@@ -107,7 +104,7 @@ export abstract class BaseHandler<
         const handler = await retry({
             callback: this.waitForHandler.bind(this),
             times: await this.attempt(),
-            when: this.failedAttempt.bind(this),
+            when: this.failedAttempt?.bind(this),
         });
 
         return handler?.call(this);

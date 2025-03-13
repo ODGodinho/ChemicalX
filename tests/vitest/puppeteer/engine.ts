@@ -1,6 +1,6 @@
 import puppeteer, {
     type Browser,
-    type PuppeteerLaunchOptions,
+    type LaunchOptions,
     type Page,
     type BrowserContext,
     type PuppeteerNode,
@@ -17,7 +17,7 @@ export type ContextClassEngine = BrowserContext;
 
 export type PageClassEngine = Page;
 
-export type BrowserOptionsEngine = PuppeteerLaunchOptions;
+export type BrowserOptionsEngine = LaunchOptions;
 
 export const browserEngine = puppeteer;
 

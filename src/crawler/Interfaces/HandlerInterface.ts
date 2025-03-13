@@ -36,14 +36,24 @@ export interface HandlerInterface {
     execute(): Promise<void>;
 
     /**
-     * Handler Execute Failed
+     * Executed whenever the handler fails
      *
      * @memberof HandlerInterface
      * @param {Exception} exception Exception
      * @param {Exception} attempt Current Attempt
      * @returns {Promise<RetryAction>}
      */
-    failedAttempt(exception: Exception, attempt: number): Promise<RetryAction>;
+    failedAttempt?(exception: Exception, attempt: number): Promise<RetryAction>;
+
+    /**
+     * Executed only on the last failed attempt
+     * Add the throw at the end otherwise the page will not transmit your exception
+     *
+     * @memberof HandlerInterface
+     * @param {Exception} exception Exception
+     * @returns {Promise<void>}
+     */
+    failedHandler?(exception: Exception): Promise<void>;
 
     /**
      * If the page is finished with success or failure

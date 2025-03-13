@@ -28,7 +28,7 @@ export interface PageInterface {
     failedAttempt?(exception: Exception, attempt: number): Promise<RetryAction>;
 
     /**
-     * Called if page execute is failed
+     * Called if page execute is failed on the last attempt
      * Add the throw at the end otherwise the page will not transmit your exception
      *
      * @param {Exception} exception Exception

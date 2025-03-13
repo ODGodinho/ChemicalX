@@ -1,5 +1,3 @@
-export type * from "./FunctionType";
-
-export type * from "./PromiseSyncType";
+export type * from "./GenericType";
 
 export type * from "../crawler/@types";
