@@ -1,6 +1,7 @@
 import { Container } from "inversify";
 
 import { ContainerHelper } from "@helpers/ContainerHelper";
+
 import "./Pages/ExamplePage";
 
 describe("Container Test", () => {

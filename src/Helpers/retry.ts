@@ -1,4 +1,4 @@
-import { UnknownException } from "@odg/exception";
+import { AbortException } from "@odg/exception";
 
 import { RetryAction } from "@enums";
 import { RetryException } from "@exceptions/RetryException";
@@ -8,16 +8,21 @@ import {
     type RetryWhenResolveInterface,
 } from "@interfaces";
 
-import { sleep } from ".";
+import { sleep, throwIf } from ".";
 
 async function getWhen(
     exception: unknown,
     options: RetryOptionsInterface<unknown> & RetryWhenResolveInterface & { attempt: number },
 ): Promise<RetryAction.Default | RetryAction.Resolve | RetryAction.Retry | undefined> {
-    const exceptionParse = UnknownException.parseOrDefault(exception, "Retry unknown Exception");
+    const exceptionParse = RetryException.parseOrDefault(exception, "Retry Unknown Exception");
+    if (exceptionParse instanceof AbortException) throw exceptionParse;
+
     const when = await options.when?.(exceptionParse, options.attempt);
     const ignore = [ RetryAction.Retry, RetryAction.Resolve ];
     if (when === RetryAction.Throw) throw exceptionParse;
+    if (options.signal?.aborted && when !== RetryAction.Resolve) {
+        throw new AbortException("Retry Aborted", exceptionParse);
+    }
 
     if (options.times <= 1 && !ignore.includes(when!)) {
         throw exceptionParse;
@@ -36,12 +41,18 @@ async function getWhen(
 async function retryHelper<ReturnType>(
     options: RetryOptionsInterface<ReturnType> & { attempt: number },
 ): Promise<ReturnType | undefined> {
-    if (typeof options.times !== "number" || Number.isNaN(options.times)) {
-        throw new RetryException("Attempt is not a number");
-    }
+    throwIf(
+        typeof options.times !== "number" || Number.isNaN(options.times),
+        () => new RetryException("Attempt is not a number"),
+    );
 
     try {
-        return await options.callback.call(options.callback, options.attempt);
+        throwIf(
+            !!options.signal?.aborted,
+            () => new AbortException(AbortException.parseOrDefault(options.signal?.reason, "Retry Aborted").message),
+        );
+
+        return await options.callback.call(options.callback, options.attempt, options.signal);
     } catch (exception: unknown) {
         const when = await getWhen(exception, options);
         if (when === RetryAction.Resolve) {

@@ -1,4 +1,4 @@
-import { Exception } from "@odg/exception";
+import { AbortException, Exception } from "@odg/exception";
 import { vi } from "vitest";
 
 import { RetryAction } from "@enums";
@@ -128,5 +128,50 @@ describe("Retry Test", () => {
             callback: callback,
             when: () => RetryAction.Resolve,
         })).rejects.toThrow(RetryException);
+    });
+
+    test("Throw if aborted", async () => {
+        const callback = vi.fn(() => {
+            throw new Error("RetryErrorBeforeAbort");
+        });
+        const signalController = new AbortController();
+        const when = vi.fn(() => {
+            signalController.abort("Not required");
+
+            return RetryAction.Default;
+        });
+
+        await expect(retry({
+            times: 10,
+            callback: callback,
+            when: when,
+            signal: signalController.signal,
+        })).rejects.toThrow(AbortException);
+
+        expect(when).toHaveBeenCalledTimes(1);
+    });
+
+    test("Throw if aborted after sleep", async () => {
+        const callback = vi.fn(() => {
+            throw new Error("RetryErrorBeforeAbort");
+        });
+        const signalController = new AbortController();
+        const when = vi.fn(() => {
+            setTimeout(() => {
+                signalController.abort("Abort Sleep");
+            }, 100);
+
+            return RetryAction.Default;
+        });
+
+        await expect(retry({
+            times: 10,
+            callback: callback,
+            when: when,
+            sleep: 700,
+            signal: signalController.signal,
+        })).rejects.toThrow(AbortException);
+
+        expect(when).toHaveBeenCalledTimes(1);
     });
 });

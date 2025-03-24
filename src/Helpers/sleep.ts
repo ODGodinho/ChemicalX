@@ -9,5 +9,3 @@ export async function sleep(milliseconds: number): Promise<void> {
         setTimeout(resolve, milliseconds);
     });
 }
-
-export default sleep;

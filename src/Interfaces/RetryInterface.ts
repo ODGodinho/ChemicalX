@@ -30,6 +30,11 @@ export interface RetryOptionsInterface<ReturnType = undefined> {
     sleep?: number;
 
     /**
+     * Caso tenha recebido sinal de abort
+     */
+    signal?: AbortSignal;
+
+    /**
      * Function to retry
      *
      * @memberof RetryOptionsInterface
@@ -45,6 +50,10 @@ export interface RetryOptionsInterface<ReturnType = undefined> {
          */
         attempt: number,
 
+        /**
+         * Caso tenha recebido sinal de abort
+         */
+        signal?: AbortSignal,
     ): PromiseOrSyncType<ReturnType>;
 
 }

@@ -1,10 +1,13 @@
 import {
     type EventListener,
-    type EventListenerNotation, type EventObjectType,
-    type EventNameType, type EventOptions,
+    type EventListenerNotation,
+    type EventObjectType,
+    type EventNameType,
+    type EventOptions,
 } from "@odg/events";
 import {
-    type Container, ContainerModule,
+    type Container,
+    ContainerModule,
     decorate,
     injectable,
 } from "inversify";
@@ -76,7 +79,10 @@ export class ContainerHelper {
         });
     }
 
-    private static bindPage(metadata: ContainerMetadataInterface, containerInstance: Container) {
+    private static bindPage(
+        metadata: ContainerMetadataInterface,
+        containerInstance: Container,
+    ): (page: unknown) => unknown {
         return (page: unknown): unknown => {
             const container = `PageOrHandler${metadata.name}`;
             containerInstance.bind(container).to(metadata.target);

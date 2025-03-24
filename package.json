@@ -62,12 +62,12 @@
         "@vitest/coverage-istanbul": "^1",
         "concurrently": "^9.1.2",
         "husky": "^9.1.7",
-        "lint-staged": "^15.2.10",
-        "playwright": "^1.49.0",
-        "puppeteer": "^23.9.0",
+        "lint-staged": "^15.5.0",
+        "playwright": "^1.51.1",
+        "puppeteer": "^24.4.0",
         "rimraf": "*",
-        "tsc-alias": "^1.8.10",
-        "typescript": "^5.7.2",
+        "tsc-alias": "^1.8.11",
+        "typescript": "^5.8.2",
         "vite-tsconfig-paths": "^4",
         "vitest": "^1.6.0"
     },
@@ -76,7 +76,7 @@
     },
     "optionalDependencies": {
         "@odg/events": "^1.2.0",
-        "inversify": "^6.1.4",
+        "inversify": "^6.2.2",
         "reflect-metadata": "^0.2.2"
     }
 }

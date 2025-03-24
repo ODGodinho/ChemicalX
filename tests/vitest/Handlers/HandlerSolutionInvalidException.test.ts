@@ -1,7 +1,9 @@
 import { Exception } from "@odg/exception";
 import { vi, type MockInstance } from "vitest";
 
-import { RetryAction, type HandlerSolution, type HandlerFunction } from "../../../src";
+import { RetryAction } from "@enums";
+import { type HandlerSolution, type HandlerFunction } from "@interfaces";
+
 import { type PageClassEngine } from "../playwright/engine";
 
 import { ExampleHandler, ExampleFailedAttemptHandler } from "./mock";
