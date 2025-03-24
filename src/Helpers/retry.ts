@@ -59,7 +59,7 @@ async function retryHelper<ReturnType>(
             return;
         }
 
-        await sleep(options.sleep ?? 0);
+        await sleep(options.sleep ?? 0, { signal: options.signal });
 
         return retryHelper({
             ...options,
