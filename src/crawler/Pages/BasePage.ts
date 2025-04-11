@@ -43,13 +43,20 @@ export abstract class BasePage<SelectorBaseType, PageClassEngine extends PageEng
 
     public finish?(exception?: Exception | undefined): Promise<void>;
 
+    public failure?(exception: Exception): Promise<void>;
+
+    public retrying?(exception: Exception, attempt: number): Promise<RetryAction>;
+
+    /** @deprecated use retrying function */
     public failedAttempt?(exception: Exception, attempt: number): Promise<RetryAction>;
 
+    /** @deprecated use failure function */
     public failedPage?(exception: Exception): Promise<void>;
 
     /**
      * Execute step With retry fail and finish
      *
+     * @deprecated Use @ODGDecorators.attemptableFlow() in class decorators and rename (failedAttempt, failedPage)
      * @memberof BasePage
      * @param {FunctionReturnType<PromiseOrSyncType<void>>} callback Start Step CallbackFunction
      * @returns {Promise<void>}

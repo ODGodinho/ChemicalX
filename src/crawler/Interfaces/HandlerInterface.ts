@@ -2,6 +2,8 @@ import { type Exception } from "@odg/exception";
 
 import { type RetryAction } from "@enums";
 
+import { type AttemptableInterface } from "../../Interfaces/AttemptableFlow";
+
 export type HandlerFunction = () => Promise<HandlerSolution>;
 
 /**
@@ -17,27 +19,21 @@ export enum HandlerSolution {
     Retry = "Retry",
 }
 
-export interface HandlerInterface {
+export interface HandlerInterface extends AttemptableInterface {
 
     /**
      * Execute step
      *
+     * @deprecated use execute Function
      * @memberof HandlerInterface
      * @returns {Promise<HandlerFunction>}
      */
     waitForHandler(): Promise<HandlerFunction>;
 
     /**
-     * Execute Handler
-     *
-     * @memberof HandlerInterface
-     * @returns {Promise<void>}
-     */
-    execute(): Promise<void>;
-
-    /**
      * Executed whenever the handler fails
      *
+     * @deprecated use retrying
      * @memberof HandlerInterface
      * @param {Exception} exception Exception
      * @param {Exception} attempt Current Attempt
@@ -49,34 +45,11 @@ export interface HandlerInterface {
      * Executed only on the last failed attempt
      * Add the throw at the end otherwise the page will not transmit your exception
      *
+     * @deprecated use failure
      * @memberof HandlerInterface
      * @param {Exception} exception Exception
      * @returns {Promise<void>}
      */
     failedHandler?(exception: Exception): Promise<void>;
-
-    /**
-     * If the page is finished with success or failure
-     *
-     * @memberof HandlerInterface
-     * @param {Exception} exception Exception If it ends with failure
-     * @returns {Promise<number>}
-     */
-    finish?(exception?: Exception): Promise<void>;
-
-    /**
-     * Action to do when the handler is success
-     *
-     * @returns {Promise<void>}
-     */
-    success?(): Promise<void>;
-
-    /**
-     * Number of attempt to execute the page
-     *
-     * @memberof HandlerInterface
-     * @returns {Promise<number>}
-     */
-    attempt(): Promise<number>;
 
 }

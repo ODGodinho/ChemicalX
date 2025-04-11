@@ -3,10 +3,11 @@ import { Exception } from "@odg/exception";
 import { ContainerHelper } from "@helpers/ContainerHelper";
 
 import {
-    BasePage, RetryAction, type PageEngineInterface, type SelectorType,
+    BasePage, ODGDecorators, RetryAction, type PageEngineInterface, type SelectorType,
 } from "../../../src";
 import { type PageClassEngine } from "../playwright/engine";
 
+@ODGDecorators.attemptableFlow()
 @ContainerHelper.injectablePage("ExamplePage")
 export class ExamplePage extends BasePage<unknown, PageClassEngine & PageEngineInterface> {
 
@@ -15,13 +16,11 @@ export class ExamplePage extends BasePage<unknown, PageClassEngine & PageEngineI
     public testIndex = 0;
 
     public async execute(): Promise<void> {
-        await this.start(async () => {
-            await this.preStart();
+        await this.preStart();
 
-            await this.throwIfAttempt();
-            await this.goto();
-            expect(await this.page.waitForSelector("div", { timeout: 5000 })).toBeTruthy();
-        });
+        await this.throwIfAttempt();
+        await this.goto();
+        expect(await this.page.waitForSelector("div", { timeout: 5000 })).toBeTruthy();
     }
 
     public async throwIfAttempt(): Promise<void> {

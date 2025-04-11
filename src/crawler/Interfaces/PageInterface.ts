@@ -1,26 +1,14 @@
 import { type Exception } from "@odg/exception";
 
 import { type RetryAction } from "@enums";
+import { type AttemptableInterface } from "@interfaces";
 
-export interface PageInterface {
-
-    /**
-     * Execute step With retry fail and finish
-     *
-     * @returns {Promise<void>}
-     */
-    execute(): Promise<void>;
-
-    /**
-     * Action to do when the page is success
-     *
-     * @returns {Promise<void>}
-     */
-    success(): Promise<void>;
+export interface PageInterface extends AttemptableInterface {
 
     /**
      * Action to do when the page failed
      *
+     * @deprecated use retrying and @ODGDecorators.attemptableFlow
      * @param {Exception} exception Exception
      * @param {number} attempt Current attempt
      * @returns {Promise<RetryAction>}
@@ -31,24 +19,9 @@ export interface PageInterface {
      * Called if page execute is failed on the last attempt
      * Add the throw at the end otherwise the page will not transmit your exception
      *
+     * @deprecated use failure and @ODGDecorators.attemptableFlow
      * @param {Exception} exception Exception
      * @returns {Promise<void>}
      */
     failedPage?(exception: Exception): Promise<void>;
-
-    /**
-     * If the page is finished with success or failure
-     *
-     * @param {Exception} exception Exception If it ends with failure
-     * @returns {Promise<number>}
-     */
-    finish?(exception?: Exception): Promise<void>;
-
-    /**
-     * Number of attempt to execute the page
-     *
-     * @returns {Promise<number>}
-     */
-    attempt(): Promise<number>;
-
 }

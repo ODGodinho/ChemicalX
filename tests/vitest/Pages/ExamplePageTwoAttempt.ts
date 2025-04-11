@@ -2,10 +2,11 @@ import { Exception } from "@odg/exception";
 import { vi } from "vitest";
 
 import {
-    BasePage, type PageEngineInterface, type SelectorType,
+    BasePage, ODGDecorators, type PageEngineInterface, type SelectorType,
 } from "../../../src";
 import { type PageClassEngine } from "../playwright/engine";
 
+@ODGDecorators.attemptableFlow()
 export class ExamplePageTwoAttempt extends BasePage<unknown, PageClassEngine & PageEngineInterface> {
 
     public $s: SelectorType = {};
@@ -21,7 +22,7 @@ export class ExamplePageTwoAttempt extends BasePage<unknown, PageClassEngine & P
     }
 
     public async execute(): Promise<void> {
-        await this.start(this.startFunction.bind(this));
+        this.startFunction();
     }
 
     public async success(): Promise<void> {
@@ -35,6 +36,10 @@ export class ExamplePageTwoAttempt extends BasePage<unknown, PageClassEngine & P
 
     public async finish(): Promise<void> {
         // Only for test
+    }
+
+    public async failure(exception: Exception): Promise<void> {
+        throw exception;
     }
 
 }

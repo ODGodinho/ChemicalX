@@ -11,6 +11,7 @@ import {
 import { ExamplePage } from "../Pages/ExamplePage";
 import { ExamplePageTwoAttempt } from "../Pages/ExamplePageTwoAttempt";
 import { ExamplePageWithFinish } from "../Pages/ExamplePageWithFinish";
+import { ExamplePageWithoutFailure } from "../Pages/ExamplePageWithoutFailure";
 import { ExamplePageWithoutFinish } from "../Pages/ExamplePageWithoutFinish";
 
 import {
@@ -142,6 +143,13 @@ describe("Example Teste", () => {
 
     test("attempt page number", async () => {
         const basePage2 = new ExamplePageTwoAttempt(page, {});
+        await expect(basePage2.execute()).rejects.toThrowError();
+        expect(basePage2.startFunction)
+            .toBeCalledTimes(2);
+    });
+
+    test("attempt failure not exists", async () => {
+        const basePage2 = new ExamplePageWithoutFailure(page, {});
         await expect(basePage2.execute()).rejects.toThrowError();
         expect(basePage2.startFunction)
             .toBeCalledTimes(2);

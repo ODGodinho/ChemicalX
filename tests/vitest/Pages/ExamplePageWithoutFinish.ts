@@ -21,6 +21,10 @@ export class ExamplePageWithoutFinish extends BasePage<unknown, PageClassEngine 
         return RetryAction.Default;
     }
 
+    public async retrying(_exception: Exception): Promise<RetryAction> {
+        return RetryAction.Default;
+    }
+
     public async attempt(): Promise<number> {
         // Only for test
         return 1;

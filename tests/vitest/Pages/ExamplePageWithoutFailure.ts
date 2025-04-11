@@ -1,4 +1,5 @@
 import { Exception } from "@odg/exception";
+import { vi } from "vitest";
 
 import {
     BasePage, ODGDecorators, type PageEngineInterface, type SelectorType,
@@ -6,14 +7,22 @@ import {
 import { type PageClassEngine } from "../playwright/engine";
 
 @ODGDecorators.attemptableFlow()
-export class ExamplePageWithFinish extends BasePage<unknown, PageClassEngine & PageEngineInterface> {
+export class ExamplePageWithoutFailure extends BasePage<unknown, PageClassEngine & PageEngineInterface> {
 
     public $s: SelectorType = {};
 
-    private testAttempt = 0;
+    public startFunction: () => void;
+
+    public constructor(page: PageClassEngine & PageEngineInterface, $$s: unknown) {
+        super(page, $$s);
+
+        this.startFunction = vi.fn(() => {
+            throw new Exception("Test Finish");
+        });
+    }
 
     public async execute(): Promise<void> {
-        if (this.testAttempt++ === 0) throw new Exception("Test Finish");
+        this.startFunction();
     }
 
     public async success(): Promise<void> {
@@ -22,20 +31,11 @@ export class ExamplePageWithFinish extends BasePage<unknown, PageClassEngine & P
 
     public async attempt(): Promise<number> {
         // Only for test
-        return 3;
+        return 2;
     }
 
     public async finish(): Promise<void> {
         // Only for test
-    }
-
-    /** @deprecated */
-    public async failedPage(): Promise<void> {
-        // Ignore failed only
-    }
-
-    public async failure(): Promise<void> {
-        // Ignore failed only
     }
 
 }

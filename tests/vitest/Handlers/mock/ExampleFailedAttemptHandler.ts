@@ -2,7 +2,8 @@ import { type Exception } from "@odg/exception";
 
 import {
     BaseHandler, type HandlerFunction, HandlerSolution, type PageEngineInterface, RetryAction,
-} from "../../../..";
+} from "src";
+
 import { type PageClassEngine } from "../../playwright/engine";
 
 export class ExampleFailedAttemptHandler extends BaseHandler<unknown, PageClassEngine & PageEngineInterface> {
@@ -20,6 +21,10 @@ export class ExampleFailedAttemptHandler extends BaseHandler<unknown, PageClassE
     }
 
     public async failedAttempt(_exception: Exception, _times: number): Promise<RetryAction> {
+        return RetryAction.Default;
+    }
+
+    public async retrying(_exception: Exception, _times: number): Promise<RetryAction> {
         return RetryAction.Default;
     }
 

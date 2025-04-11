@@ -8,4 +8,6 @@ export type * from "./GetterInterface";
 
 export type * from "./TimeoutInterface";
 
+export type * from "./AttemptableFlow";
+
 export * from "../crawler/Interfaces";

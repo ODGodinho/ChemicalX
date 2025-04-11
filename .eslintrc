@@ -5,5 +5,16 @@
     "extends": [ "@odg" ],
     "globals": {
         "Proxy": true
-    }
+    },
+    "overrides": [
+        {
+            "files": "**/Decorators/*.ts",
+            "rules": {
+                "max-classes-per-file": [
+                    "error",
+                    { "ignoreExpressions": true }
+                ]
+            }
+        }
+    ]
 }
