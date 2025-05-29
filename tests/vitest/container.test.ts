@@ -1,14 +1,13 @@
 import { Container } from "inversify";
 
-import { ContainerHelper } from "@helpers/ContainerHelper";
-
 import "./Pages/ExamplePage";
+import { ODGDecorators } from "src";
 
 describe("Container Test", () => {
     test("Test new Container", async () => {
         const container = new Container();
 
-        const loader = ContainerHelper.loadModule(container);
+        const loader = ODGDecorators.loadModule(container);
         container.load(loader);
         expect(() => container.get("ExamplePage")).not.toThrow();
         const factory = container.get<(page: unknown) => { page: unknown }>("ExamplePage");
@@ -17,8 +16,8 @@ describe("Container Test", () => {
     test("Test Clear Metadata", async () => {
         const container = new Container();
 
-        Reflect.defineMetadata(ContainerHelper["metaData"], undefined, Reflect);
-        const loader = ContainerHelper.loadModule(container);
+        Reflect.defineMetadata(ODGDecorators["metaData"], undefined, Reflect);
+        const loader = ODGDecorators.loadModule(container);
 
         expect(() => {
             container.load(loader);

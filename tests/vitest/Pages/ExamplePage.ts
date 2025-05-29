@@ -1,14 +1,12 @@
 import { Exception } from "@odg/exception";
 
-import { ContainerHelper } from "@helpers/ContainerHelper";
-
 import {
     BasePage, ODGDecorators, RetryAction, type PageEngineInterface, type SelectorType,
 } from "../../../src";
 import { type PageClassEngine } from "../playwright/engine";
 
 @ODGDecorators.attemptableFlow()
-@ContainerHelper.injectablePage("ExamplePage")
+@ODGDecorators.injectablePageOrHandler("ExamplePage")
 export class ExamplePage extends BasePage<unknown, PageClassEngine & PageEngineInterface> {
 
     public $s: SelectorType = {};
