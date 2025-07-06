@@ -74,6 +74,9 @@
     "dependencies": {
         "@odg/exception": "*"
     },
+    "peerDependencies": {
+        "inversify": ">=6.2.2"
+    },
     "optionalDependencies": {
         "@odg/events": "^1.2.0",
         "inversify": ">=6.2.2",
