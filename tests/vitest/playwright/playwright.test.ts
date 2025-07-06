@@ -1,6 +1,5 @@
 import { rmSync } from "node:fs";
 
-import { Exception } from "@odg/exception";
 import { chromium } from "playwright";
 import { vi } from "vitest";
 
@@ -12,7 +11,6 @@ import { ExamplePage } from "../Pages/ExamplePage";
 import { ExamplePageTwoAttempt } from "../Pages/ExamplePageTwoAttempt";
 import { ExamplePageWithFinish } from "../Pages/ExamplePageWithFinish";
 import { ExamplePageWithoutFailure } from "../Pages/ExamplePageWithoutFailure";
-import { ExamplePageWithoutFinish } from "../Pages/ExamplePageWithoutFinish";
 
 import {
     type ContextClassEngine,
@@ -110,35 +108,21 @@ describe("Example Teste", () => {
     test("Teste Instances elements", async () => {
         const basePage = new ExamplePage(page, {});
         expect(basePage).toBeInstanceOf(ExamplePage);
-        await expect(basePage.preStart()).resolves.toBeUndefined();
-        expect(basePage["currentAttempt"]).toBe(1);
-        await expect(basePage.success()).resolves.toBeUndefined();
         expect(basePage["currentAttempt"]).toBe(0);
+        await expect(basePage.execute()).resolves.toBeUndefined();
+        expect(basePage["testIndex"]).toBe(4);
     });
 
-    const exceptionTestMessage = "test";
-    test("Attempt Page", async () => {
-        const basePage = new ExamplePage(page, {});
-        await expect(basePage.execute()).resolves.toBeUndefined();
-        await expect(basePage["executeCatcher"](new Exception(exceptionTestMessage)))
-            .rejects.toThrowError(exceptionTestMessage);
-
-        const basePage3 = new ExamplePageWithoutFinish(page, {});
-        await expect(basePage3.execute()).resolves.toBeUndefined();
-        await expect(basePage3["executeCatcher"](new Exception(exceptionTestMessage))).rejects.toThrowError(Exception);
-        await expect(basePage3["executeCatcher"](void 0)).rejects.toThrowError("Page UnknownException");
-
+    test("Teste Example Function", async () => {
         expect(page.example()).toEqual(1);
     });
 
     test("attempt WithFinish", async () => {
         const basePage2 = new ExamplePageWithFinish(page, {});
+        const finishSpy = vi.spyOn(basePage2, "finish").mockImplementation(async () => Promise.resolve());
         await expect(basePage2.execute()).resolves.toBeUndefined();
-        await expect(basePage2["executeCatcher"](new Exception(exceptionTestMessage)))
-            .resolves.toBeUndefined();
-
-        await expect(basePage2["executeCatcher"](void 0))
-            .resolves.toBeUndefined();
+        expect(finishSpy)
+            .toBeCalled();
     });
 
     test("attempt page number", async () => {

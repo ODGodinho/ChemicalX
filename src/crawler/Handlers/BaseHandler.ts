@@ -3,7 +3,6 @@ import { type Exception, UnknownException } from "@odg/exception";
 import { type RetryAction } from "@enums";
 import { retry } from "@helpers";
 import {
-    type AttemptableInterface,
     HandlerSolution,
     type HandlerFunction,
     type HandlerInterface,
@@ -14,7 +13,7 @@ import { type PageEngineInterface } from "../@types";
 export abstract class BaseHandler<
     SelectorBaseType,
     PageEngineType extends PageEngineInterface,
-> implements HandlerInterface, AttemptableInterface {
+> implements HandlerInterface {
 
     public constructor(
         public readonly page: PageEngineType,
@@ -62,27 +61,6 @@ export abstract class BaseHandler<
     public failure?(exception: Exception): Promise<void>;
 
     /**
-     * Called Always handler attempt error.
-     *
-     * @deprecated use retrying function
-     * @param {Exception} _exception Exception error
-     * @param {number} _attempt Tentativa Atual
-     * @returns {Promise<RetryAction>}
-     */
-    public failedAttempt?(_exception: Exception, _attempt: number): Promise<RetryAction>;
-
-    /**
-     * Called if handler execute is failed
-     * Add the throw at the end otherwise the handler will not transmit your exception
-     *
-     * @deprecated use failure function
-     * @memberof BaseHandler
-     * @param {Exception} _exception Exception error
-     * @returns {Promise<void>}
-     */
-    public failedHandler?(_exception: Exception): Promise<void>;
-
-    /**
      * Execute step With retry fail and finish
      *
      * @returns {Promise<void>}
@@ -124,7 +102,7 @@ export abstract class BaseHandler<
         const handler = await retry({
             callback: this.waitForHandler.bind(this),
             times: await this.attempt(),
-            when: (this.retrying ?? this.failedAttempt)?.bind(this),
+            when: this.retrying?.bind(this),
         });
 
         return handler?.call(this);
@@ -132,10 +110,9 @@ export abstract class BaseHandler<
 
     private async finallyCatch(error: unknown): Promise<void> {
         const exception = UnknownException.parseOrDefault(error, "Handler UnknownException");
-        const failure = this.failure ?? this.failedHandler;
 
         await this.finish?.(exception);
-        if (failure) await failure.call(this, exception);
+        if (this.failure) await this.failure(exception);
         else throw exception;
     }
 

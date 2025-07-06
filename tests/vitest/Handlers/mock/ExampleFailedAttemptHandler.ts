@@ -20,10 +20,6 @@ export class ExampleFailedAttemptHandler extends BaseHandler<unknown, PageClassE
         return 0;
     }
 
-    public async failedAttempt(_exception: Exception, _times: number): Promise<RetryAction> {
-        return RetryAction.Default;
-    }
-
     public async retrying(_exception: Exception, _times: number): Promise<RetryAction> {
         return RetryAction.Default;
     }

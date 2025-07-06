@@ -1,6 +1,7 @@
 import { type Exception } from "@odg/exception";
 
 import { type RetryAction } from "@enums";
+import { type RetryOptionsInterface } from "@interfaces";
 
 export interface AttemptableInterface {
 
@@ -11,7 +12,9 @@ export interface AttemptableInterface {
      *
      * @returns {Promise<void>}
      */
-    execute(): Promise<void>;
+    execute(
+        ...argumentsCallback: Parameters<RetryOptionsInterface["callback"]>
+    ): Promise<void>;
 
     /**
      * Called when the flow finishes successfully.

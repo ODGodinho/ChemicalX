@@ -29,11 +29,6 @@ export class ExamplePageWithFinish extends BasePage<unknown, PageClassEngine & P
         // Only for test
     }
 
-    /** @deprecated */
-    public async failedPage(): Promise<void> {
-        // Ignore failed only
-    }
-
     public async failure(): Promise<void> {
         // Ignore failed only
     }

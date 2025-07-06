@@ -1,12 +1,15 @@
 import { Exception } from "@odg/exception";
 
 import {
-    BasePage, ODGDecorators, RetryAction, type PageEngineInterface, type SelectorType,
+    BasePage,
+    ODGDecorators,
+    type PageEngineInterface,
+    type SelectorType,
 } from "../../../src";
 import { type PageClassEngine } from "../playwright/engine";
 
-@ODGDecorators.attemptableFlow()
 @ODGDecorators.injectablePageOrHandler("ExamplePage")
+@ODGDecorators.attemptableFlow()
 export class ExamplePage extends BasePage<unknown, PageClassEngine & PageEngineInterface> {
 
     public $s: SelectorType = {};
@@ -31,12 +34,8 @@ export class ExamplePage extends BasePage<unknown, PageClassEngine & PageEngineI
             .catch(() => null);
     }
 
-    public async failedAttempt(_exception: Exception): Promise<RetryAction> {
-        return RetryAction.Default;
-    }
-
     public async success(): Promise<void> {
-        await super.success();
+        await super.success?.();
 
         this.testIndex++;
     }

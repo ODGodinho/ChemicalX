@@ -8,14 +8,14 @@ import { type PageClassEngine } from "../../playwright/engine";
 export class FailedIgnoreHandler extends BaseHandler<unknown, PageClassEngine & PageEngineInterface> {
 
     public async waitForHandler(): Promise<HandlerFunction> {
-        throw new Exception("This exception failedHandler ignore");
+        throw new Exception("This exception failure ignore");
     }
 
     public async attempt(): Promise<number> {
         return 0;
     }
 
-    public async failedHandler(): Promise<void> {
+    public async failure(): Promise<void> {
         // Only ignore exception
     }
 

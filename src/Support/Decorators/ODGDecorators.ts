@@ -8,7 +8,9 @@ import {
 } from "@odg/events";
 import { UnknownException } from "@odg/exception";
 import {
-    type Container, ContainerModule, decorate, injectable,
+    type Container,
+    ContainerModule,
+    injectable,
 } from "inversify";
 
 import { retry } from "@helpers";
@@ -23,7 +25,7 @@ export class ODGDecorators {
 
     public static injectablePageOrHandler(name: string): CallableFunction {
         return (target: object) => {
-            decorate(injectable(), target);
+            Reflect.decorate([ injectable() ], target as Function);
             const previousMetadata = Reflect.getMetadata(ODGDecorators.metaData, Reflect) as [] | undefined;
 
             const newMetadata = [ {
@@ -99,14 +101,16 @@ export class ODGDecorators {
                 Reflect,
             ) as ContainerMetadataInterface[] | undefined ?? [];
 
+            type PageFactoryType = (page: unknown) => unknown;
+
             for (const metadata of provideMetadata) {
-                containerInstance.bind(metadata.name)
-                    .toFactory(() => ODGDecorators.bindPage(metadata, containerInstance));
+                containerInstance.bind<PageFactoryType>(metadata.name)
+                    .toFactory(() => ODGDecorators.bindPageOrHandler(metadata, containerInstance));
             }
         });
     }
 
-    private static bindPage(
+    private static bindPageOrHandler(
         metadata: ContainerMetadataInterface,
         containerInstance: Container,
     ): (page: unknown) => unknown {
@@ -114,7 +118,7 @@ export class ODGDecorators {
             const container = `PageOrHandler${metadata.name}`;
             containerInstance.bind(container).to(metadata.target);
             const value = containerInstance.get(container);
-            containerInstance.unbind(container);
+            void containerInstance.unbind(container);
             (value as { page: unknown }).page = page;
 
             return value;

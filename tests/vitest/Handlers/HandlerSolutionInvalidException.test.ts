@@ -38,7 +38,7 @@ describe("Handler Test Invalid Exception", () => {
         const handlerFailWaitMock: MockInstance<
             [_exception: Exception, _attempt: number],
             Promise<RetryAction>
-        > = vi.spyOn(handlerFailed, "failedAttempt");
+        > = vi.spyOn(handlerFailed, "retrying");
 
         handlerFailWaitMock.mockImplementation(async () => RetryAction.Resolve);
 
