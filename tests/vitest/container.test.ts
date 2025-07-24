@@ -9,7 +9,7 @@ describe("Container Test", () => {
             [exampleContainer](page: unknown): { page: unknown };
         }>();
 
-        container.loadSync(ODGDecorators.loadModule(container));
+        container.load(ODGDecorators.loadModule(container));
         expect(() => container.get(exampleContainer)).not.toThrow();
         const factory = container.get(exampleContainer);
         expect(factory(123).page).toBe(123);
@@ -21,7 +21,7 @@ describe("Container Test", () => {
         const loader = ODGDecorators.loadModule(container);
 
         expect(() => {
-            container.loadSync(loader);
+            container.load(loader);
         }).not.toThrow();
     });
 

@@ -1,5 +1,5 @@
 import {
-    type BindToFluentSyntax,
+    type interfaces,
     Container as ContainerInversify,
 } from "inversify";
 
@@ -18,6 +18,8 @@ export class Container<
      * @param {Name} serviceIdentifier containerName
      * @returns {ContainerType[Name]}
      */
+    public get<Name extends keyof ContainerType>(serviceIdentifier: Name): ContainerType[Name];
+    public get<Name>(serviceIdentifier: string): Name;
     public get<Name extends keyof ContainerType>(serviceIdentifier: Name): ContainerType[Name] {
         return super.get<ContainerType[Name]>(serviceIdentifier as string);
     }
@@ -35,18 +37,20 @@ export class Container<
         return super.get(serviceIdentifier as string);
     }
 
-    public bind<Name>(serviceIdentifier: string): BindToFluentSyntax<Name>;
-
     /**
      * Bind Container Item
      *
      * @template {string} Name
      * @param {Name} serviceIdentifier containerName
-     * @returns {BindToFluentSyntax<ContainerType[Name]>}
+     * @returns {interfaces.BindingToSyntax<ContainerType[Name]>}
      */
     public bind<Name extends keyof ContainerType>(
+        serviceIdentifier: Name
+    ): interfaces.BindingToSyntax<ContainerType[Name]>;
+    public bind<Name>(serviceIdentifier: string): interfaces.BindingToSyntax<Name>;
+    public bind<Name extends keyof ContainerType>(
         serviceIdentifier: Name,
-    ): BindToFluentSyntax<ContainerType[Name]> {
+    ): interfaces.BindingToSyntax<ContainerType[Name]> {
         return super.bind(serviceIdentifier as string);
     }
 
@@ -57,11 +61,11 @@ export class Container<
      * @param {Name} serviceIdentifier containerName
      * @returns {Promise<ContainerType[Name]>}
      */
+    public getAsync<Name extends keyof ContainerType>(serviceIdentifier: Name): Promise<ContainerType[Name]>;
+    public getAsync<Name>(serviceIdentifier: interfaces.ServiceIdentifier<Name>): Promise<Name>;
     public async getAsync<Name extends keyof ContainerType>(serviceIdentifier: Name): Promise<ContainerType[Name]> {
         return super.getAsync(serviceIdentifier as string);
     }
-
-    public isBound<Name>(serviceIdentifier: string): Name;
 
     /**
      * Get Container Item
@@ -70,6 +74,8 @@ export class Container<
      * @param {Name} serviceIdentifier containerName
      * @returns {boolean}
      */
+    public isBound<Name extends keyof ContainerType>(serviceIdentifier: Name): boolean;
+    public isBound<Name>(serviceIdentifier: string): Name;
     public isBound<Name extends keyof ContainerType>(serviceIdentifier: Name): boolean {
         return super.isBound(serviceIdentifier as string);
     }

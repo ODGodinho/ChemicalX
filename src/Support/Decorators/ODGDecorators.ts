@@ -10,6 +10,7 @@ import { UnknownException } from "@odg/exception";
 import {
     type Container,
     ContainerModule,
+    decorate,
     injectable,
 } from "inversify";
 
@@ -25,7 +26,7 @@ export class ODGDecorators {
 
     public static injectablePageOrHandler(name: string): CallableFunction {
         return (target: object) => {
-            Reflect.decorate([ injectable() ], target as Function);
+            decorate(injectable(), target);
             const previousMetadata = Reflect.getMetadata(ODGDecorators.metaData, Reflect) as [] | undefined;
 
             const newMetadata = [ {
@@ -118,7 +119,7 @@ export class ODGDecorators {
             const container = `PageOrHandler${metadata.name}`;
             containerInstance.bind(container).to(metadata.target);
             const value = containerInstance.get(container);
-            void containerInstance.unbind(container);
+            containerInstance.unbind(container);
             (value as { page: unknown }).page = page;
 
             return value;

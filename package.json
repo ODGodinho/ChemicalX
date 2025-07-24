@@ -83,7 +83,7 @@
     },
     "optionalDependencies": {
         "@odg/events": "^1.2.0",
-        "inversify": ">=6.2.2",
+        "inversify": "^6.2.2",
         "reflect-metadata": "^0.2.2"
     }
 }
