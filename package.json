@@ -9,6 +9,10 @@
         "type": "git",
         "url": "https://github.com/ODGodinho/ChemicalX"
     },
+    "exports": {
+        ".": "./dist/index.js",
+        "./container": "./dist/Container.js"
+    },
     "scripts": {
         "build": "rimraf dist/ && tsc --project ./tsconfig.build.json && tsc-alias -p tsconfig.build.json",
         "build:watch": "npm run build && (concurrently \"tsc --project ./tsconfig.build.json -w\" \"tsc-alias -p tsconfig.build.json -w\")",
