@@ -16,8 +16,6 @@ const vite = defineConfig({
                 statements: [ coverage100, coverage100 ],
             },
             exclude: [
-                "src/index.ts",
-                "src/index.js",
                 "tests/",
             ],
         },
