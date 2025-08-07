@@ -29,9 +29,14 @@ export class ExamplePage extends BasePage<unknown, PageClassEngine & PageEngineI
     }
 
     public async goto(): Promise<void> {
-        this.page.goto("https://www.google.com", { waitUntil: "domcontentloaded" })
+        await this.page.goto("about:blank", { waitUntil: "domcontentloaded" })
             .then(() => null)
             .catch(() => null);
+        await this.page.evaluate(() => {
+            const newDiv = document.createElement("div");
+            newDiv.textContent = "myDiv";
+            document.body.append(newDiv);
+        });
     }
 
     public async success(): Promise<void> {

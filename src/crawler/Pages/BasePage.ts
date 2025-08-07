@@ -37,6 +37,8 @@ export abstract class BasePage<SelectorBaseType, PageClassEngine extends PageEng
 
     public retrying?(exception: Exception, attempt: number): Promise<RetryAction>;
 
+    public sleep?(): Promise<number>;
+
     /**
      * Selector of this page
      *

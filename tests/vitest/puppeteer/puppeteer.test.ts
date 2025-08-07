@@ -48,7 +48,12 @@ describe("Example Teste", () => {
         expect(context.closed).toEqual(false);
         expect(typeof context.id).toBe("string");
         const page = await context.newPage();
-        await page.goto("https://www.google.com");
+        await page.goto("about:blank");
+        await page.evaluate(() => {
+            const newDiv = document.createElement("div");
+            newDiv.textContent = "myDiv";
+            document.body.append(newDiv);
+        });
         expect(await page.waitForSelector("div")).toBeTruthy();
         expect(page.mouse).toBeInstanceOf(Mouse);
         expect(page.example()).toEqual(1);

@@ -64,4 +64,11 @@ export interface AttemptableInterface {
      */
     attempt(): Promise<number>;
 
+    /**
+     * Sleep time before retrying milliseconds
+     *
+     * @returns {Promise<number>}
+     */
+    sleep?(): Promise<number>;
+
 }

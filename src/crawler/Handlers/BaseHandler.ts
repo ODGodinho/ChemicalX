@@ -61,6 +61,15 @@ export abstract class BaseHandler<
     public failure?(exception: Exception): Promise<void>;
 
     /**
+     * Sleep time before retrying milliseconds
+     *
+     * @abstract
+     * @memberof BaseHandler
+     * @returns {Promise<number>}
+     */
+    public sleep?(): Promise<number>;
+
+    /**
      * Execute step With retry fail and finish
      *
      * @returns {Promise<void>}
@@ -102,6 +111,7 @@ export abstract class BaseHandler<
         const handler = await retry({
             callback: this.waitForHandler.bind(this),
             times: await this.attempt(),
+            sleep: await this.sleep?.(),
             when: this.retrying?.bind(this),
         });
 

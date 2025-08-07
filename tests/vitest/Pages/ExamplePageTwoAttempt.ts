@@ -34,6 +34,11 @@ export class ExamplePageTwoAttempt extends BasePage<unknown, PageClassEngine & P
         return 2;
     }
 
+    public async sleep(): Promise<number> {
+        // Only for test
+        return 400;
+    }
+
     public async finish(): Promise<void> {
         // Only for test
     }

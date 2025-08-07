@@ -45,7 +45,7 @@ export class ODGDecorators {
                 try {
                     await retry({
                         times: await this.attempt(),
-                        sleep: 0,
+                        sleep: await this.sleep?.(),
                         callback: super.execute.bind(this),
                         when: this.retrying?.bind(this),
                     });
