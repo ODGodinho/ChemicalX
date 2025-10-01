@@ -1,9 +1,9 @@
-import { type Exception, UnknownException } from "@odg/exception";
+import { UnknownException, type Exception } from "@odg/exception";
 
-import { type RetryAction } from "@enums";
+import { RetryAction } from "@enums";
+import { RetryException } from "@exceptions/RetryException";
 import { retry } from "@helpers";
 import {
-    HandlerSolution,
     type HandlerFunction,
     type HandlerInterface,
 } from "@interfaces";
@@ -76,54 +76,42 @@ export abstract class BaseHandler<
      */
     public async execute(): Promise<void> {
         try {
-            const handlerCallback = await this.waitHandlerAttempt();
+            await retry({
+                callback: async () => {
+                    const waitHandler = await this.waitForHandler();
+                    const handlerCallback = await waitHandler.call(this);
 
-            if (handlerCallback === HandlerSolution.Retry) {
-                await this.execute();
-
-                return;
-            }
+                    if ([ RetryAction.Default, RetryAction.Retry ].includes(handlerCallback as RetryAction)) {
+                        throw new RetryException(
+                            "Force Retry Action Default",
+                            undefined,
+                            handlerCallback as RetryAction,
+                        );
+                    }
+                },
+                times: await this.attempt(),
+                sleep: await this.sleep?.(),
+                when: this.retrying?.bind(this),
+            });
 
             await this.finish?.();
             await this.success?.();
-        } catch (error) {
-            await this.finallyCatch(error);
+        } catch (error: unknown) {
+            const exception = UnknownException.parseOrDefault(error, "Handler UnknownException");
+
+            await this.finish?.(exception);
+            if (this.failure) await this.failure(exception);
+            else throw exception;
         }
     }
 
     /**
      * Use if you handler identify a successful response
      *
-     * @returns {Promise<HandlerSolution>}
+     * @returns {Promise<RetryAction>}
      */
-    public async successSolution(): Promise<HandlerSolution> {
-        return HandlerSolution.Resolve;
-    }
-
-    /**
-     * Wait for handler with Attempt and retry
-     *
-     * @memberof BaseHandler
-     * @protected
-     * @returns {Promise<HandlerSolution | undefined>}
-     */
-    protected async waitHandlerAttempt(): Promise<HandlerSolution | undefined> {
-        const handler = await retry({
-            callback: this.waitForHandler.bind(this),
-            times: await this.attempt(),
-            sleep: await this.sleep?.(),
-            when: this.retrying?.bind(this),
-        });
-
-        return handler?.call(this);
-    }
-
-    private async finallyCatch(error: unknown): Promise<void> {
-        const exception = UnknownException.parseOrDefault(error, "Handler UnknownException");
-
-        await this.finish?.(exception);
-        if (this.failure) await this.failure(exception);
-        else throw exception;
+    public async successSolution(): Promise<RetryAction> {
+        return RetryAction.Resolve;
     }
 
     /**

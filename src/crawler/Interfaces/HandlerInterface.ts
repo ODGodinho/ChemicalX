@@ -1,6 +1,10 @@
+import { type RetryAction } from "@enums";
+
 import { type AttemptableInterface } from "../../Interfaces/AttemptableFlow";
 
-export type HandlerFunction = () => Promise<HandlerSolution>;
+export type HandlerSolutionType = Exclude<RetryAction, RetryAction.Throw>;
+
+export type HandlerFunction = () => Promise<HandlerSolution | HandlerSolutionType>;
 
 /**
  * State Handler Function
@@ -8,6 +12,7 @@ export type HandlerFunction = () => Promise<HandlerSolution>;
  * Resolve - To Resolve Handler
  * Retry - To Execute Handler retry
  *
+ * @deprecated Use RetryAction enum and HandlerSolutionType type instead
  * @enum {string}
  */
 export enum HandlerSolution {

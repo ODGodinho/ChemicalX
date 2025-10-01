@@ -1,7 +1,7 @@
 import { Exception } from "@odg/exception";
 import { vi, type MockInstance } from "vitest";
 
-import { HandlerSolution } from "@interfaces";
+import { RetryAction } from "@enums";
 
 import { type PageClassEngine } from "../playwright/engine";
 
@@ -9,7 +9,7 @@ import { WithoutFunctionHandler } from "./mock/WithoutFunctionHandler";
 
 describe("Handler success Function", () => {
     let handler: WithoutFunctionHandler;
-    let handlerSolutionMock: MockInstance<unknown[], Promise<HandlerSolution>>;
+    let handlerSolutionMock: MockInstance<unknown[], Promise<RetryAction>>;
 
     beforeEach(() => {
         handler = new WithoutFunctionHandler(undefined as unknown as PageClassEngine, {});
@@ -17,7 +17,7 @@ describe("Handler success Function", () => {
     });
 
     test("Test success without optional functions", async () => {
-        handlerSolutionMock.mockImplementation(async () => HandlerSolution.Resolve);
+        handlerSolutionMock.mockImplementation(async () => RetryAction.Resolve);
 
         await expect(handler.execute()).resolves.toBeUndefined();
         expect(handlerSolutionMock.mock.calls.length).toBe(1);

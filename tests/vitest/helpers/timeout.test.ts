@@ -3,7 +3,7 @@ import { vi } from "vitest";
 import { InvalidArgumentException, TimeoutException } from "@exceptions";
 import { timeout } from "@helpers";
 
-describe("Retry Test", () => {
+describe("Timeout Test", () => {
     test("Timeout Without name", async () => {
         const callback = vi.fn(async () => new Promise(() => {
             // Ignore
