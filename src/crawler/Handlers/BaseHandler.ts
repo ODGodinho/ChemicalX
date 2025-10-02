@@ -16,6 +16,8 @@ export abstract class BaseHandler<
     PageEngineType extends PageEngineInterface,
 > implements HandlerInterface {
 
+    protected currentAttempt: number = 0;
+
     public constructor(
         public readonly page: PageEngineType,
         public readonly $$s: SelectorBaseType,
@@ -78,7 +80,8 @@ export abstract class BaseHandler<
     public async execute(): Promise<void> {
         try {
             const handlerSolution = await retry({
-                callback: async () => {
+                callback: async (attempt) => {
+                    this.currentAttempt = attempt;
                     const waitHandler = await this.waitForHandler();
                     if (waitHandler instanceof Exception) {
                         return waitHandler;
