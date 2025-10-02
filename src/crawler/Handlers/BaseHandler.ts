@@ -1,4 +1,4 @@
-import { UnknownException, type Exception } from "@odg/exception";
+import { Exception, UnknownException } from "@odg/exception";
 
 import { RetryAction } from "@enums";
 import { RetryException } from "@exceptions/RetryException";
@@ -6,6 +6,7 @@ import { retry } from "@helpers";
 import {
     type HandlerFunction,
     type HandlerInterface,
+    type HandlerSolutionType,
 } from "@interfaces";
 
 import { type PageEngineInterface } from "../@types";
@@ -76,23 +77,33 @@ export abstract class BaseHandler<
      */
     public async execute(): Promise<void> {
         try {
-            await retry({
+            const handlerSolution = await retry({
                 callback: async () => {
                     const waitHandler = await this.waitForHandler();
-                    const handlerCallback = await waitHandler.call(this);
+                    if (waitHandler instanceof Exception) {
+                        return waitHandler;
+                    }
 
-                    if ([ RetryAction.Default, RetryAction.Retry ].includes(handlerCallback as RetryAction)) {
+                    const handlerSolutionCallback = await waitHandler.call(this);
+
+                    if ([ RetryAction.Default, RetryAction.Retry ].includes(handlerSolutionCallback as RetryAction)) {
                         throw new RetryException(
                             "Force Retry Action Default",
                             undefined,
-                            handlerCallback as RetryAction,
+                            handlerSolutionCallback as RetryAction,
                         );
                     }
+
+                    return handlerSolutionCallback;
                 },
                 times: await this.attempt(),
                 sleep: await this.sleep?.(),
                 when: this.retrying?.bind(this),
             });
+
+            if (handlerSolution instanceof Exception) {
+                throw handlerSolution;
+            }
 
             await this.finish?.();
             await this.success?.();
@@ -108,9 +119,9 @@ export abstract class BaseHandler<
     /**
      * Use if you handler identify a successful response
      *
-     * @returns {Promise<RetryAction>}
+     * @returns {Promise<HandlerSolutionType>}
      */
-    public async successSolution(): Promise<RetryAction> {
+    public async successSolution(): Promise<HandlerSolutionType> {
         return RetryAction.Resolve;
     }
 

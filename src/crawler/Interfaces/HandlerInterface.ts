@@ -1,10 +1,12 @@
+import { type Exception } from "@odg/exception";
+
 import { type RetryAction } from "@enums";
 
 import { type AttemptableInterface } from "../../Interfaces/AttemptableFlow";
 
-export type HandlerSolutionType = Exclude<RetryAction, RetryAction.Throw>;
+export type HandlerSolutionType = Exception | Exclude<RetryAction, RetryAction.Throw>;
 
-export type HandlerFunction = () => Promise<HandlerSolution | HandlerSolutionType>;
+export type HandlerFunction = Exception | (() => Promise<HandlerSolution | HandlerSolutionType>);
 
 /**
  * State Handler Function
