@@ -1,5 +1,9 @@
 import {
-    BaseHandler, type HandlerFunction, HandlerSolution, type PageEngineInterface,
+    BaseHandler,
+    RetryAction,
+    type HandlerFunction,
+    type HandlerSolutionType,
+    type PageEngineInterface,
 } from "../../../../src";
 import { type PageClassEngine } from "../../playwright/engine";
 
@@ -9,8 +13,8 @@ export class ExampleHandler extends BaseHandler<unknown, PageClassEngine & PageE
         return this.testSolution.bind(this);
     }
 
-    public async testSolution(): Promise<HandlerSolution> {
-        return HandlerSolution.Resolve;
+    public async testSolution(): Promise<HandlerSolutionType> {
+        return RetryAction.Resolve;
     }
 
     public async attempt(): Promise<number> {

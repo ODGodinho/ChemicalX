@@ -5,6 +5,8 @@ import { type RetryOptionsInterface } from "@interfaces";
 
 export interface AttemptableInterface {
 
+    currentAttempt: number;
+
     /**
      * Executes the main step of the flow.
      *
@@ -31,7 +33,7 @@ export interface AttemptableInterface {
      * Return a retry action to control retry behavior.
      *
      * @param {Exception} exception Exception
-     * @param {number} attempt Current attempt
+     * @param {number} attempt Current attempt (starts at 1).
      * @returns {Promise<RetryAction>}
      */
     retrying?(exception: Exception, attempt: number): Promise<RetryAction>;

@@ -2,15 +2,15 @@ import { Exception } from "@odg/exception";
 import { vi, type MockInstance } from "vitest";
 
 import { RetryAction } from "@enums";
-import { type HandlerSolution, type HandlerFunction } from "@interfaces";
+import { type HandlerFunction } from "@interfaces";
 
 import { type PageClassEngine } from "../playwright/engine";
 
-import { ExampleHandler, ExampleFailedAttemptHandler } from "./mock";
+import { ExampleFailedAttemptHandler, ExampleHandler } from "./mock";
 
 describe("Handler Test Invalid Exception", () => {
     let handler: ExampleHandler;
-    let handlerSolutionMock: MockInstance<unknown[], Promise<HandlerSolution>>;
+    let handlerSolutionMock: MockInstance<unknown[], Promise<RetryAction>>;
     let handlerWaitForHandlerMock: MockInstance<unknown[], Promise<HandlerFunction>>;
 
     beforeEach(() => {
@@ -19,13 +19,13 @@ describe("Handler Test Invalid Exception", () => {
         handlerWaitForHandlerMock = vi.spyOn(handler, "waitForHandler");
     });
 
-    test("Test solution invalid exception", async () => {
+    test("Test solution exception code", async () => {
         handlerSolutionMock.mockImplementation(async () => {
             // eslint-disable-next-line no-throw-literal
             throw undefined;
         });
 
-        await expect(handler.execute()).rejects.toThrowError("Handler UnknownException");
+        await expect(handler.execute()).rejects.toThrowError("Retry Unknown Exception");
         expect(handlerSolutionMock.mock.calls.length).toBe(1);
     });
 

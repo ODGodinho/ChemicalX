@@ -1,27 +1,22 @@
-import { type Exception } from "@odg/exception";
+import { Exception } from "@odg/exception";
 
 import {
     BaseHandler,
     type HandlerFunction,
-    type HandlerSolutionType,
     type PageEngineInterface,
     RetryAction,
 } from "src";
 
 import { type PageClassEngine } from "../../playwright/engine";
 
-export class ExampleFailedAttemptHandler extends BaseHandler<unknown, PageClassEngine & PageEngineInterface> {
+export class ExampleWaitHandlerReturnException extends BaseHandler<unknown, PageClassEngine & PageEngineInterface> {
 
     public async waitForHandler(): Promise<HandlerFunction> {
-        return this.testSolution.bind(this);
-    }
-
-    public async testSolution(): Promise<HandlerSolutionType> {
-        return RetryAction.Resolve;
+        return new Exception("stop process");
     }
 
     public async attempt(): Promise<number> {
-        return 0;
+        return 5;
     }
 
     public async retrying(_exception: Exception, _times: number): Promise<RetryAction> {

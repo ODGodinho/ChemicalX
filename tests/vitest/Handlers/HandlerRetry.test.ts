@@ -1,13 +1,13 @@
 import { vi, type MockInstance } from "vitest";
 
-import { HandlerSolution } from "../../../src";
+import { RetryAction, type HandlerSolutionType } from "../../../src";
 import { type PageClassEngine } from "../playwright/engine";
 
 import { ExampleHandler } from "./mock/ExampleHandler";
 
 describe("Handler Retry tests", () => {
     let handler: ExampleHandler;
-    let handlerSolutionMock: MockInstance<unknown[], Promise<HandlerSolution>>;
+    let handlerSolutionMock: MockInstance<unknown[], Promise<HandlerSolutionType>>;
     let handlerAttemptMock: MockInstance<unknown[], Promise<number>>;
     beforeEach(() => {
         handler = new ExampleHandler(undefined as unknown as PageClassEngine, {});
@@ -17,7 +17,7 @@ describe("Handler Retry tests", () => {
 
     test("Test Retry Solution 3 times", async () => {
         handlerSolutionMock.mockImplementation(async () => {
-            if (handlerSolutionMock.mock.calls.length < 3) return HandlerSolution.Retry;
+            if (handlerSolutionMock.mock.calls.length < 3) return RetryAction.Retry;
 
             return handler.successSolution();
         });

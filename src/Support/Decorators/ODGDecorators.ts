@@ -46,7 +46,11 @@ export class ODGDecorators {
                     await retry({
                         times: await this.attempt(),
                         sleep: await this.sleep?.(),
-                        callback: super.execute.bind(this),
+                        callback: async (attempt, signal) => {
+                            this.currentAttempt = attempt;
+
+                            return super.execute.call(this, attempt, signal);
+                        },
                         when: this.retrying?.bind(this),
                     });
 
