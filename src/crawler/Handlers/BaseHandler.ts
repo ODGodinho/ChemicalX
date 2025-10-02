@@ -16,7 +16,7 @@ export abstract class BaseHandler<
     PageEngineType extends PageEngineInterface,
 > implements HandlerInterface {
 
-    protected currentAttempt: number = 0;
+    public currentAttempt: number = 0;
 
     public constructor(
         public readonly page: PageEngineType,

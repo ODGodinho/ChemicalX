@@ -1,6 +1,6 @@
 import { type Exception } from "@odg/exception";
 
-import { type RetryAction, type PageInterface } from "../..";
+import { type PageInterface, type RetryAction } from "../..";
 import { type PageEngineInterface } from "../index";
 import { type SelectorType } from "../Selectors/SelectorsType";
 
@@ -12,7 +12,7 @@ export abstract class BasePage<SelectorBaseType, PageClassEngine extends PageEng
      * @type {number}
      * @memberof BasePage
      */
-    protected currentAttempt: number = 0;
+    public currentAttempt: number = 0;
 
     public constructor(
         public readonly page: PageClassEngine,
@@ -23,10 +23,11 @@ export abstract class BasePage<SelectorBaseType, PageClassEngine extends PageEng
     /**
      * Pre Start Page
      *
+     * @deprecated removed (Empty function)
      * @memberof BasePage
      */
     public async preStart(): Promise<void> {
-        this.currentAttempt++;
+        // Deprecated AttemptableFlow implement currentAttempt Count
     }
 
     public success?(): Promise<void>;

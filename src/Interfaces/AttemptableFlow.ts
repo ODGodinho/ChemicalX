@@ -5,6 +5,8 @@ import { type RetryOptionsInterface } from "@interfaces";
 
 export interface AttemptableInterface {
 
+    currentAttempt: number;
+
     /**
      * Executes the main step of the flow.
      *
