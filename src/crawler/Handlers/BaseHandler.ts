@@ -106,8 +106,8 @@ export abstract class BaseHandler<
 
     private async executeHandlerFunction(): Promise<HandlerSolutionType | undefined> {
         const handlerSolution = await retry({
-            callback: async (attempt) => {
-                this.currentAttempt = attempt;
+            callback: async () => {
+                ++this.currentAttempt;
                 const waitHandler = await this.waitForHandler();
                 if (waitHandler instanceof Exception) {
                     return waitHandler;
