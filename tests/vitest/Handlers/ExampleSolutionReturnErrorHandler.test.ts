@@ -4,7 +4,6 @@ import { vi, type MockInstance } from "vitest";
 import { type HandlerSolutionType } from "@interfaces";
 import { ExampleSolutionReturnErrorHandler } from "tests/vitest/Handlers/mock/ExampleSolutionReturnErrorHandler";
 
-import { RetryAction } from "../../..";
 import { type PageClassEngine } from "../playwright/engine";
 
 describe("Handler Retry tests", () => {
@@ -25,7 +24,9 @@ describe("Handler Retry tests", () => {
     test("Test Handler Solution return Exception after 2 times", async () => {
         const handlerRetrying = vi.spyOn(handler, "retrying");
         handlerSolutionMock.mockImplementation(async () => {
-            if (handlerSolutionMock.mock.calls.length < 3) return RetryAction.Retry;
+            if (handlerSolutionMock.mock.calls.length < 3) {
+                throw new Exception("Action force to retry");
+            }
 
             return new Exception("mock error");
         });
