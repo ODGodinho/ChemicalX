@@ -17,8 +17,8 @@
         "build": "rimraf dist/ && tsc --project ./tsconfig.build.json && tsc-alias -p tsconfig.build.json",
         "build:watch": "npm run build && (concurrently \"tsc --project ./tsconfig.build.json -w\" \"tsc-alias -p tsconfig.build.json -w\")",
         "start": "node ./dist/index.js",
-        "lint": "eslint --ext .js,.jsx,.ts,.tsx,.json,.jsonc,.json5,.yml,.yaml,.xml,.txt,.svg,.properties,.gradle,.java,.cpp,.c,.cs,.html,.css,.groovy,.gitignore,.npmignore,.toml,.env,.example,.sample,.ini,.php,.bat,.powershell,.ps1,.sh,.bash,.eslintrc",
-        "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx,.json,.jsonc,.json5,.yml,.yaml,.xml,.txt,.svg,.properties,.gradle,.java,.cpp,.c,.cs,.html,.css,.groovy,.gitignore,.npmignore,.toml,.env,.example,.sample,.ini,.php,.bat,.powershell,.ps1,.sh,.bash,.eslintrc --fix",
+        "lint": "eslint",
+        "lint:fix": "eslint --fix",
         "prepare": "husky",
         "test": "vitest run",
         "test:ci": "vitest run --passWithNoTests",
@@ -60,30 +60,48 @@
     "author": "Dragons Gamers <https://www.linkedin.com/in/victor-alves-odgodinho>",
     "license": "MIT",
     "devDependencies": {
-        "@odg/eslint-config": "*",
+        "@inversifyjs/binding-decorators": "^1.1.5",
+        "@inversifyjs/strongly-typed": "^2.2.0",
+        "@odg/eslint-config": "^3",
+        "@odg/events": "^1.2.0",
         "@odg/tsconfig": "*",
-        "@types/node": ">=20",
-        "@vitest/coverage-istanbul": "^1",
-        "concurrently": "^9.2.0",
+        "@types/node": ">=24",
+        "@vitest/coverage-istanbul": "^4.0.18",
+        "concurrently": "^9.2.1",
         "husky": "^9.1.7",
-        "lint-staged": "^16.1.2",
-        "playwright": "^1.53.2",
-        "puppeteer": "^24.11.2",
+        "inversify": "^7.11.0",
+        "lint-staged": "^16.2.7",
+        "playwright": "^1.58.2",
+        "puppeteer": "^24.37.2",
+        "reflect-metadata": "^0.2.2",
         "rimraf": "*",
-        "tsc-alias": "^1.8.16s",
-        "typescript": "^5.8.3",
-        "vite-tsconfig-paths": "^4",
-        "vitest": "^1.6.0"
+        "tsc-alias": "^1.8.16",
+        "typescript": "^5.9.3",
+        "vite": "^7.3.1",
+        "vite-tsconfig-paths": "^6.1.1",
+        "vitest": "^4.0.18"
     },
     "dependencies": {
         "@odg/exception": "*"
     },
     "peerDependencies": {
-        "inversify": ">=6.2.2"
+        "@inversifyjs/strongly-typed": "^2.2.0",
+        "@odg/events": ">=1.2",
+        "inversify": ">=7",
+        "reflect-metadata": ">=0.2.2"
     },
-    "optionalDependencies": {
-        "@odg/events": "^1.2.0",
-        "inversify": "^6.2.2",
-        "reflect-metadata": "^0.2.2"
+    "peerDependenciesMeta": {
+        "inversify": {
+            "optional": true
+        },
+        "@inversifyjs/strongly-typed": {
+            "optional": true
+        },
+        "@odg/events": {
+            "optional": true
+        },
+        "reflect-metadata": {
+            "optional": true
+        }
     }
 }

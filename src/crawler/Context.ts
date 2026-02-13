@@ -1,24 +1,23 @@
-import { getAccessDecorator } from "@support/Decorators";
-
 import {
-    type PageOptionsLibraryInterface,
+    ODGDecorators,
     type ContextChemicalXInterface,
     type ContextEngineInterface,
     type CreatePageFactoryType,
     type GetterAccessInterface,
     type PageChemicalXInterface,
     type PageEngineInterface,
+    type PageOptionsLibraryInterface,
 } from "..";
 
-@getAccessDecorator()
+@ODGDecorators.getterAccess()
 export class Context<
-    ContextEngineType extends ContextEngineInterface,
-    PageEngineType extends PageEngineInterface,
-> implements GetterAccessInterface, ContextChemicalXInterface<ContextEngineType> {
+    ContextClassEngine extends ContextEngineInterface,
+    PageClassEngine extends PageEngineInterface,
+> implements GetterAccessInterface, ContextChemicalXInterface<ContextClassEngine> {
 
     public constructor(
-        public readonly $contextInstance: ContextEngineType,
-        public readonly $newPage: CreatePageFactoryType<ContextChemicalXInterface<ContextEngineType>, PageEngineType>,
+        public readonly $contextInstance: ContextClassEngine,
+        public readonly $newPage: CreatePageFactoryType<ContextChemicalXInterface<ContextClassEngine>, PageClassEngine>,
     ) {
 
     }
@@ -30,26 +29,26 @@ export class Context<
 
     public async newPage(
         options?: Record<string, unknown>,
-    ): Promise<PageChemicalXInterface<PageEngineType> & PageEngineType> {
+    ): Promise<PageChemicalXInterface<PageClassEngine> & PageClassEngine> {
         return this.$newPage(
             this,
-            await (this.$contextInstance.newPage as (...itens: unknown[]) => Promise<PageEngineType>)(
+            await (this.$contextInstance.newPage as (...itens: unknown[]) => Promise<PageClassEngine>)(
                 this.$contextInstance,
                 {
                     ...await this.defaultPageOptions(),
                     ...options,
                 },
             ),
-        ) as PageChemicalXInterface<PageEngineType> & PageEngineType;
+        ) as PageChemicalXInterface<PageClassEngine> & PageClassEngine;
     }
 
-    public pages(): Array<PageChemicalXInterface<PageEngineType> & PageEngineType> {
-        const pages = (this.$contextInstance.pages as () => PageEngineType[])();
+    public pages(): Array<PageChemicalXInterface<PageClassEngine> & PageClassEngine> {
+        const pages = (this.$contextInstance.pages as () => PageClassEngine[])();
 
         return pages.map((page) => this.$newPage(
             this,
             page,
-        ) as PageChemicalXInterface<PageEngineType> & PageEngineType);
+        ) as PageChemicalXInterface<PageClassEngine> & PageClassEngine);
     }
 
     public __get(key: PropertyKey): unknown {

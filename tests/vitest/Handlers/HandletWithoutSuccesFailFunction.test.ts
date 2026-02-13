@@ -1,18 +1,17 @@
 import { Exception } from "@odg/exception";
-import { vi, type MockInstance } from "vitest";
+import { type Mock, vi } from "vitest";
 
 import { RetryAction } from "@enums";
+import type { HandlerSolutionType } from "@interfaces";
 
-import { type PageClassEngine } from "../playwright/engine";
-
-import { WithoutFunctionHandler } from "./mock/WithoutFunctionHandler";
+import { WithoutFunctionHandler } from "./mocks/WithoutFunctionHandler";
 
 describe("Handler success Function", () => {
     let handler: WithoutFunctionHandler;
-    let handlerSolutionMock: MockInstance<unknown[], Promise<RetryAction>>;
+    let handlerSolutionMock: Mock<() => Promise<HandlerSolutionType>>;
 
     beforeEach(() => {
-        handler = new WithoutFunctionHandler(undefined as unknown as PageClassEngine, {});
+        handler = new WithoutFunctionHandler();
         handlerSolutionMock = vi.spyOn(handler, "testSolution");
     });
 

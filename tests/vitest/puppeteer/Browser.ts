@@ -2,12 +2,12 @@ import {
     Browser as BrowserBase,
 } from "../../../src/crawler/index";
 
-import {
-    type BrowserClassEngine,
-    type PageClassEngine,
-    type ContextClassEngine,
+import type {
+    BrowserClassEngine,
+    PageClassEngine,
+    ContextClassEngine,
 
-    type BrowserOptionsEngine,
+    BrowserOptionsEngine,
 } from "./engine";
 
 export class Browser extends BrowserBase<

@@ -1,7 +1,7 @@
-import {
-    type ContextEngineInterface,
-    type ContextOptionsLibraryInterface,
-    type ContextChemicalXInterface,
+import type {
+    ContextEngineInterface,
+    ContextOptionsLibraryInterface,
+    ContextChemicalXInterface,
 } from "./Context";
 
 export interface BrowserOptionsLibraryInterface {

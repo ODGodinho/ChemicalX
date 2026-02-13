@@ -1,4 +1,4 @@
-import { Str } from "../../../../src";
+import { Str } from "src";
 
 describe("isJson", () => {
     const words = {

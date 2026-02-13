@@ -2,19 +2,24 @@ import { Exception } from "@odg/exception";
 import { vi } from "vitest";
 
 import {
-    BasePage, ODGDecorators, type PageEngineInterface, type SelectorType,
-} from "../../../src";
-import { type PageClassEngine } from "../playwright/engine";
+    BasePage,
+    ODGDecorators,
+    type PageEngineInterface,
+    type SelectorType,
+} from "../../../../src";
+import type { PageClassEngine } from "../../playwright/engine";
 
 @ODGDecorators.attemptableFlow()
-export class ExamplePageTwoAttempt extends BasePage<unknown, PageClassEngine & PageEngineInterface> {
+export class ExamplePageTwoAttempt extends BasePage<PageClassEngine & PageEngineInterface> {
 
     public $s: SelectorType = {};
 
+    public $$s = {};
+
     public startFunction: () => void;
 
-    public constructor(page: PageClassEngine & PageEngineInterface, $$s: unknown) {
-        super(page, $$s);
+    public constructor() {
+        super();
 
         this.startFunction = vi.fn(() => {
             throw new Exception("Test Finish");

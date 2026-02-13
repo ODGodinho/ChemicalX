@@ -9,7 +9,7 @@ import { ODGDecorators } from "../../../src";
 @injectable()
 export class ExampleEventListeners implements EventListenerInterface<Record<string, unknown>, string> {
 
-    public handler = vi.fn<unknown[], never>(() => this.test as never);
+    public handler = vi.fn(() => this.test as never);
 
     private readonly test: string = "containerEvent";
 

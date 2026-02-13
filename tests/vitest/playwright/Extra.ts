@@ -1,6 +1,8 @@
-/* eslint-disable regex/invalid */
+import type {
+    Page as PageBase,
+} from "./Page";
+
 declare module "playwright-core" {
-    interface Page {
-        example(): number;
+    interface Page extends PageBase {
     }
 }

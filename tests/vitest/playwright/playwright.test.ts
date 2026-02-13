@@ -1,25 +1,27 @@
-import { rmSync } from "node:fs";
+import { rm } from "node:fs/promises";
 
 import { chromium } from "playwright";
 import { vi } from "vitest";
 
 import {
-    type ContextChemicalXInterface, type CreateContextFactoryType, type CreatePageFactoryType, BrowserManager,
+    type ContextChemicalXInterface,
+    type CreateContextFactoryType,
+    type CreatePageFactoryType,
+    BrowserManager,
 } from "src";
 
-import { ExamplePage } from "../Pages/ExamplePage";
-import { ExamplePageTwoAttempt } from "../Pages/ExamplePageTwoAttempt";
-import { ExamplePageWithFinish } from "../Pages/ExamplePageWithFinish";
-import { ExamplePageWithoutFailure } from "../Pages/ExamplePageWithoutFailure";
+import { ExamplePage } from "../Pages/mocks/ExamplePage";
+import { ExamplePageTwoAttempt } from "../Pages/mocks/ExamplePageTwoAttempt";
+import { ExamplePageWithFinish } from "../Pages/mocks/ExamplePageWithFinish";
+import { ExamplePageWithoutFailure } from "../Pages/mocks/ExamplePageWithoutFailure";
 
-import {
-    type ContextClassEngine,
-    type BrowserClassEngine,
-
-    type MyPage,
-    type MyContext,
-    type MyBrowser,
-    type PageClassEngine,
+import type {
+    BrowserClassEngine,
+    ContextClassEngine,
+    MyBrowser,
+    MyContext,
+    MyPage,
+    PageClassEngine,
 } from "./engine";
 
 import { Browser, Context, Page } from ".";
@@ -54,6 +56,7 @@ describe("Example Teste", () => {
     let contexts: MyContext[];
     let emptyContext: MyContext[];
     let page: MyPage;
+
     beforeAll(async () => {
         browser = await browserManager.newBrowser(async () => chromium.launch({})) as MyBrowser;
 
@@ -65,11 +68,13 @@ describe("Example Teste", () => {
 
     test("Page Empty", async () => {
         const newContext = await browser.newContext();
+
         expect(newContext.pages().length).toEqual(0);
     });
 
     test("Page Count", async () => {
         const newPage = await context.newPage();
+
         expect(context.pages().length).toEqual(2);
         await newPage.close();
         expect(context.pages().length).toEqual(1);
@@ -88,6 +93,7 @@ describe("Example Teste", () => {
             browser.$browserInstance as unknown as { contexts(): undefined },
             "contexts",
         );
+
         handlerAttemptMock.mockImplementation(() => void 0);
 
         expect(browser.contexts()).toEqual([]);
@@ -97,16 +103,18 @@ describe("Example Teste", () => {
         const context2 = await browserManager.newPersistentContext(
             async () => chromium.launchPersistentContext("./temp/") as Promise<MyContext>,
         );
+
         expect(context2).not.toBeUndefined();
         expect(typeof context2.newPage).toBe("function");
         await expect(context2.cookies()).resolves.toEqual([]);
         await context2.close();
 
-        rmSync("./temp/", { recursive: true });
+        await rm("./temp/", { recursive: true });
     });
 
     test("Teste Instances elements", async () => {
-        const basePage = new ExamplePage(page, {});
+        const basePage = new ExamplePage().setPage(page);
+
         expect(basePage).toBeInstanceOf(ExamplePage);
         expect(basePage["currentAttempt"]).toBe(0);
         await expect(basePage.execute()).resolves.toBeUndefined();
@@ -118,22 +126,25 @@ describe("Example Teste", () => {
     });
 
     test("attempt WithFinish", async () => {
-        const basePage2 = new ExamplePageWithFinish(page, {});
+        const basePage2 = new ExamplePageWithFinish().setPage(page);
         const finishSpy = vi.spyOn(basePage2, "finish").mockImplementation(async () => Promise.resolve());
+
         await expect(basePage2.execute()).resolves.toBeUndefined();
         expect(finishSpy)
             .toBeCalled();
     });
 
     test("attempt page number", async () => {
-        const basePage2 = new ExamplePageTwoAttempt(page, {});
+        const basePage2 = new ExamplePageTwoAttempt().setPage(page);
+
         await expect(basePage2.execute()).rejects.toThrowError();
         expect(basePage2.startFunction)
             .toBeCalledTimes(2);
     });
 
     test("attempt failure not exists", async () => {
-        const basePage2 = new ExamplePageWithoutFailure(page, {});
+        const basePage2 = new ExamplePageWithoutFailure().setPage(page);
+
         await expect(basePage2.execute()).rejects.toThrowError();
         expect(basePage2.startFunction)
             .toBeCalledTimes(2);

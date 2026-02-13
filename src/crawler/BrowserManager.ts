@@ -1,41 +1,45 @@
-import {
-    type BrowserChemicalXInterface,
-    type BrowserEngineInterface,
-    type ContextChemicalXInterface,
-    type ContextEngineInterface,
-    type CreateBrowserFactoryType,
-    type CreateContextFactoryType,
-    type CreatePageFactoryType,
-    type PageEngineInterface,
+import type {
+    BrowserChemicalXInterface,
+    BrowserEngineInterface,
+    ContextChemicalXInterface,
+    ContextEngineInterface,
+    CreateBrowserFactoryType,
+    CreateContextFactoryType,
+    CreatePageFactoryType,
+    PageEngineInterface,
 } from "..";
 
 export class BrowserManager<
-    BrowserEngineType extends BrowserEngineInterface,
-    ContextEngineType extends ContextEngineInterface,
-    PageEngineType extends PageEngineInterface,
+    BrowserClassEngine extends BrowserEngineInterface,
+    ContextClassEngine extends ContextEngineInterface,
+    PageClassEngine extends PageEngineInterface,
 > {
 
     public constructor(
-        private readonly $newBrowser: CreateBrowserFactoryType<BrowserEngineType, ContextEngineType, PageEngineType>,
-        private readonly $newContext: CreateContextFactoryType<ContextEngineType, PageEngineType>,
-        private readonly $newPage: CreatePageFactoryType<ContextChemicalXInterface<ContextEngineType>, PageEngineType>,
+        private readonly $newBrowser: CreateBrowserFactoryType<BrowserClassEngine, ContextClassEngine, PageClassEngine>,
+        private readonly $newContext: CreateContextFactoryType<ContextClassEngine, PageClassEngine>,
+        private readonly $newPage: CreatePageFactoryType<
+            ContextChemicalXInterface<ContextClassEngine>,
+            PageClassEngine
+        >,
     ) {
     }
 
     public async newBrowser(
-        browser: () => Promise<BrowserEngineType>,
-    ): Promise<BrowserChemicalXInterface<BrowserEngineType, ContextEngineType> & BrowserEngineType> {
+        browser: () => Promise<BrowserClassEngine>,
+    ): Promise<BrowserChemicalXInterface<BrowserClassEngine, ContextClassEngine> & BrowserClassEngine> {
         return this.$newBrowser(await browser(), this.$newContext, this.$newPage) as BrowserChemicalXInterface<
-            BrowserEngineType, ContextEngineType
-        > & BrowserEngineType;
+            BrowserClassEngine,
+            ContextClassEngine
+        > & BrowserClassEngine;
     }
 
     public async newPersistentContext(
-        context: () => Promise<ContextEngineType>,
-    ): Promise<ContextChemicalXInterface<ContextEngineType> & ContextEngineType> {
+        context: () => Promise<ContextClassEngine>,
+    ): Promise<ContextChemicalXInterface<ContextClassEngine> & ContextClassEngine> {
         return this.$newContext(await context(), this.$newPage) as ContextChemicalXInterface<
-            ContextEngineType
-        > & ContextEngineType;
+            ContextClassEngine
+        > & ContextClassEngine;
     }
 
 }

@@ -2,25 +2,29 @@ import { Exception, UnknownException } from "@odg/exception";
 
 import { RetryAction } from "@enums";
 import { retry } from "@helpers";
-import {
-    type HandlerFunction,
-    type HandlerInterface,
-    type HandlerSolutionType,
+import type {
+    HandlerFunction,
+    HandlerInterface,
+    HandlerSolutionType,
 } from "@interfaces";
 
-import { type PageEngineInterface } from "../@types";
+import type { PageEngineInterface } from "../@types";
+import type { SelectorType } from "../Selectors/SelectorsType";
 
 export abstract class BaseHandler<
-    SelectorBaseType,
-    PageEngineType extends PageEngineInterface,
+    PageClassEngine extends PageEngineInterface,
 > implements HandlerInterface {
 
     public currentAttempt: number = 0;
 
-    public constructor(
-        public readonly page: PageEngineType,
-        public readonly $$s: SelectorBaseType,
-    ) {
+    public page?: PageClassEngine;
+
+    public abstract readonly $$s: Record<number | string | symbol, SelectorType>;
+
+    public setPage(page: PageClassEngine): this {
+        this.page = page;
+
+        return this;
     }
 
     /**
@@ -45,7 +49,7 @@ export abstract class BaseHandler<
      *
      * Return a `RetryAction` to control the retry behavior.
      *
-     * @param {Exception} exception Exception
+     * @param {Exception} exception Exception that caused the retry.
      * @param {number} attempt The current attempt number.
      * @returns {Promise<RetryAction>} The action to take before the next retry.
      */
@@ -90,6 +94,7 @@ export abstract class BaseHandler<
             const exception = UnknownException.parseOrDefault(error, "Handler UnknownException");
 
             await this.finish?.(exception);
+
             if (this.failure) await this.failure(exception);
             else throw exception;
         }
@@ -109,6 +114,7 @@ export abstract class BaseHandler<
             callback: async () => {
                 ++this.currentAttempt;
                 const waitHandler = await this.waitForHandler();
+
                 if (waitHandler instanceof Exception) {
                     return waitHandler;
                 }

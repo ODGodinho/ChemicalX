@@ -1,31 +1,34 @@
-import {
-    type BrowserChemicalXInterface, type BrowserEngineInterface,
-    type ContextChemicalXInterface, type ContextEngineInterface,
-    type PageChemicalXInterface, type PageEngineInterface,
+import type {
+    BrowserChemicalXInterface,
+    BrowserEngineInterface,
+    ContextChemicalXInterface,
+    ContextEngineInterface,
+    PageChemicalXInterface,
+    PageEngineInterface,
 } from "..";
 
 export type CreatePageFactoryType<
-    ContextEngineType extends ContextChemicalXInterface<ContextEngineInterface>,
-    PageEngineType extends PageEngineInterface,
+    ContextClassEngine extends ContextChemicalXInterface<ContextEngineInterface>,
+    PageClassEngine extends PageEngineInterface,
 > = (
-    context: ContextEngineType,
-    page: PageEngineType
-) => PageChemicalXInterface<PageEngineType>;
+    context: ContextClassEngine,
+    page: PageClassEngine,
+) => PageChemicalXInterface<PageClassEngine>;
 
 export type CreateContextFactoryType<
-    ContextEngineType extends ContextEngineInterface,
-    PageEngineType extends PageEngineInterface,
+    ContextClassEngine extends ContextEngineInterface,
+    PageClassEngine extends PageEngineInterface,
 > = (
-    context: ContextEngineType,
-    newPage: CreatePageFactoryType<ContextChemicalXInterface<ContextEngineType>, PageEngineType>
-) => ContextChemicalXInterface<ContextEngineType>;
+    context: ContextClassEngine,
+    newPage: CreatePageFactoryType<ContextChemicalXInterface<ContextClassEngine>, PageClassEngine>,
+) => ContextChemicalXInterface<ContextClassEngine>;
 
 export type CreateBrowserFactoryType<
-    BrowserEngineType extends BrowserEngineInterface,
-    ContextEngineType extends ContextEngineInterface,
-    PageEngineType extends PageEngineInterface,
+    BrowserClassEngine extends BrowserEngineInterface,
+    ContextClassEngine extends ContextEngineInterface,
+    PageClassEngine extends PageEngineInterface,
 > = (
-    browser: BrowserEngineType,
-    newContext: CreateContextFactoryType<ContextEngineType, PageEngineType>,
-    newPage: CreatePageFactoryType<ContextChemicalXInterface<ContextEngineType>, PageEngineType>
-) => BrowserChemicalXInterface<BrowserEngineType, ContextEngineType>;
+    browser: BrowserClassEngine,
+    newContext: CreateContextFactoryType<ContextClassEngine, PageClassEngine>,
+    newPage: CreatePageFactoryType<ContextChemicalXInterface<ContextClassEngine>, PageClassEngine>,
+) => BrowserChemicalXInterface<BrowserClassEngine, ContextClassEngine>;

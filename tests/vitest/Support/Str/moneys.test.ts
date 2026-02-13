@@ -4,8 +4,8 @@ const values = [
     {
         original: "This costs 10,00 or 20,00",
         expected: [
-            10.0,
-            20.0,
+            10,
+            20,
         ],
     },
     {
@@ -29,7 +29,7 @@ describe.each(values)("Test Moneys extract", (option) => {
         const moneys = new Str(option.original).moneys();
 
         expect(moneys).toBeInstanceOf(Arr);
-        expect(moneys.toArray().map((item) => item.toNumber())).toEqual(option.expected);
+        expect(moneys.toArray().map((moneyItem) => moneyItem.toNumber())).toEqual(option.expected);
     });
 });
 

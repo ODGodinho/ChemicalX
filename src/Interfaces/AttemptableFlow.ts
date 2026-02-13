@@ -1,7 +1,7 @@
-import { type Exception } from "@odg/exception";
+import type { Exception } from "@odg/exception";
 
-import { type RetryAction } from "@enums";
-import { type RetryOptionsInterface } from "@interfaces";
+import type { RetryAction } from "@enums";
+import type { RetryOptionsInterface } from "@interfaces";
 
 export interface AttemptableInterface {
 
@@ -32,7 +32,7 @@ export interface AttemptableInterface {
      *
      * Return a retry action to control retry behavior.
      *
-     * @param {Exception} exception Exception
+     * @param {Exception} exception Last Exception to dispatch this function
      * @param {number} attempt Current attempt (starts at 1).
      * @returns {Promise<RetryAction>}
      */
@@ -44,7 +44,7 @@ export interface AttemptableInterface {
      * Use this to handle final failure logic.
      * You should re-throw the exception if needed.
      *
-     * @param {Exception} exception Exception
+     * @param {Exception} exception Last exception in attemptableFlow
      * @returns {Promise<void>}
      */
     failure?(exception: Exception): Promise<void>;

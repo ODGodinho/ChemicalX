@@ -1,8 +1,8 @@
 import { Context as ContextBase, type ContextOptionsLibraryInterface } from "../../../src/crawler";
 
-import {
-    type ContextClassEngine,
-    type PageClassEngine,
+import type {
+    ContextClassEngine,
+    PageClassEngine,
 } from "./engine";
 
 export class Context extends ContextBase<

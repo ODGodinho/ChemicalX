@@ -1,10 +1,12 @@
-import { type Exception } from "@odg/exception";
+import type { Exception } from "@odg/exception";
 
-import { type PageInterface, type RetryAction } from "../..";
-import { type PageEngineInterface } from "../index";
-import { type SelectorType } from "../Selectors/SelectorsType";
+import type { PageInterface, RetryAction } from "../..";
+import type { PageEngineInterface } from "../index";
+import type { SelectorType } from "../Selectors/SelectorsType";
 
-export abstract class BasePage<SelectorBaseType, PageClassEngine extends PageEngineInterface> implements PageInterface {
+export abstract class BasePage<
+    PageClassEngine extends PageEngineInterface,
+> implements PageInterface {
 
     /**
      * Current attempt number
@@ -14,31 +16,7 @@ export abstract class BasePage<SelectorBaseType, PageClassEngine extends PageEng
      */
     public currentAttempt: number = 0;
 
-    public constructor(
-        public readonly page: PageClassEngine,
-        public readonly $$s: SelectorBaseType,
-    ) {
-    }
-
-    /**
-     * Pre Start Page
-     *
-     * @deprecated removed (Empty function)
-     * @memberof BasePage
-     */
-    public async preStart(): Promise<void> {
-        // Deprecated AttemptableFlow implement currentAttempt Count
-    }
-
-    public success?(): Promise<void>;
-
-    public finish?(exception?: Exception | undefined): Promise<void>;
-
-    public failure?(exception: Exception): Promise<void>;
-
-    public retrying?(exception: Exception, attempt: number): Promise<RetryAction>;
-
-    public sleep?(): Promise<number>;
+    public page?: PageClassEngine;
 
     /**
      * Selector of this page
@@ -46,8 +24,25 @@ export abstract class BasePage<SelectorBaseType, PageClassEngine extends PageEng
      * @type {SelectorType}
      * @memberof BasePage
      */
-    // eslint-disable-next-line sort-class-members/sort-class-members
-    public abstract readonly $s: SelectorType;
+    public abstract readonly $s?: SelectorType;
+
+    public abstract readonly $$s?: Record<number | string | symbol, SelectorType>;
+
+    public setPage(page: PageClassEngine): this {
+        this.page = page;
+
+        return this;
+    }
+
+    public success?(): Promise<void>;
+
+    public finish?(exception?: Exception): Promise<void>;
+
+    public failure?(exception: Exception): Promise<void>;
+
+    public retrying?(exception: Exception, attempt: number): Promise<RetryAction>;
+
+    public sleep?(): Promise<number>;
 
     public abstract execute(): Promise<void>;
 

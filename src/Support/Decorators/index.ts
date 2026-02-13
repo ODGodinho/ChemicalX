@@ -1,3 +1,1 @@
-export * from "./ODGDecorators";
-
-export * from "./GetterDecorator";
+export * from "./OdgDecorators";

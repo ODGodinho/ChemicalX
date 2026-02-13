@@ -1,4 +1,4 @@
-import { type CloneableInterface, type NativeInterface } from "..";
+import type { CloneableInterface, NativeInterface } from "..";
 import { MoneyNotFoundException } from "../Exceptions";
 import { MoneyMultipleResultException } from "../Exceptions/MoneyMultipleResultException";
 
@@ -19,7 +19,8 @@ export class Str implements CloneableInterface, NativeInterface<string> {
 
     public constructor(
         private subject: string,
-    ) { }
+    ) {
+    }
 
     /**
      * Get a money value from a string and return a Num class
@@ -40,9 +41,11 @@ export class Str implements CloneableInterface, NativeInterface<string> {
         const stringCurrent = new Str(match[0]).onlyNumbers().toString();
 
         return new Num(
-            +(`${stringCurrent.slice(0, Math.max(0, stringCurrent.length - centLength))}`
-                + `${match.groups.separatorCent ? "." : ""}`
-                + `${match.groups.separatorCent ? stringCurrent.slice(stringCurrent.length - centLength) : ""}`),
+            +(
+                stringCurrent.slice(0, Math.max(0, stringCurrent.length - centLength))
+                + (match.groups.separatorCent ? "." : "")
+                + (match.groups.separatorCent ? stringCurrent.slice(stringCurrent.length - centLength) : "")
+            ),
         );
     }
 
@@ -94,12 +97,12 @@ export class Str implements CloneableInterface, NativeInterface<string> {
      *
      * @returns {this}
      */
-    public formatUnicorn(data: Record<string, number | string>): this {
-        for (const key in data) {
+    public formatUnicorn(objectVariable: Record<string, number | string>): this {
+        for (const key in objectVariable) {
             this.subject = this.subject.replaceAll(
                 // eslint-disable-next-line security/detect-non-literal-regexp
-                new RegExp(`\\{\\{\\s*${key.toString()}\\s*\\}\\}`, "gi"),
-                String(data[key]),
+                new RegExp(String.raw`\{\{\s*${key}\s*\}\}`, "gi"),
+                String(objectVariable[key]),
             );
         }
 

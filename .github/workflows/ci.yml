@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        version: [ 22 ]
+        version: [ 24 ]
     steps:
       - uses: actions/checkout@v3
         with:
@@ -32,7 +32,7 @@ jobs:
         with:
           reporter: github-pr-review
           github_token: ${{ secrets.GH_TOKEN }}
-          eslint_flags: '--ext .js,.jsx,.ts,.tsx,.json,.jsonc,.json5,.yml,.yaml,.xml,.txt,.svg,.properties,.gradle,.java,.cpp,.c,.cs,.html,.css,.groovy,.gitignore,.npmignore,.toml,.env,.example,.sample,.ini,.php,.bat,.powershell,.ps1,.sh,.bash,.eslintrc .'
+          eslint_flags: .
           fail_on_error: true
       - name: Build Code
         run: yarn build

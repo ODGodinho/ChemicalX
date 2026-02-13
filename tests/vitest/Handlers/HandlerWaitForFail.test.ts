@@ -1,24 +1,32 @@
 import { Exception } from "@odg/exception";
-import { vi, type MockInstance } from "vitest";
+import { type Mock, vi } from "vitest";
 
-import { type HandlerFunction } from "@interfaces";
+import type { HandlerFunction } from "@interfaces";
 
-import { type PageClassEngine } from "../playwright/engine";
+import type { PageClassEngine } from "../playwright/engine";
 
-import { ExampleHandler } from "./mock/ExampleHandler";
+import { ExampleHandler } from "./mocks/ExampleHandler";
 
 describe("Handler Attempt", () => {
     let handler: ExampleHandler;
-    let handlerWaitMock: MockInstance<unknown[], Promise<HandlerFunction>>;
-    let handlerAttemptMock: MockInstance<unknown[], Promise<number>>;
+    let handlerWaitMock: Mock<() => Promise<HandlerFunction>>;
+    let handlerAttemptMock: Mock<() => Promise<number>>;
+
     beforeEach(() => {
-        handler = new ExampleHandler(undefined as unknown as PageClassEngine, {});
+        handler = new ExampleHandler();
         handlerWaitMock = vi.spyOn(handler, "waitForHandler");
         handlerAttemptMock = vi.spyOn(handler, "attempt");
     });
 
+    test("Test init page instance", () => {
+        expect(handler.page).toBeUndefined();
+        expect(handler.setPage(123 as unknown as PageClassEngine)).toBe(handler);
+        expect(handler.page).toBe(123);
+    });
+
     test("test execute exception", async () => {
         const message = "Exception called 2 times";
+
         handlerWaitMock.mockImplementation(async () => {
             throw new Exception(message);
         });
@@ -30,6 +38,7 @@ describe("Handler Attempt", () => {
 
     test("Test execute exception one time", async () => {
         const message = "Exception Called 1 time";
+
         handlerWaitMock.mockImplementation(async () => {
             throw new Exception(message);
         });

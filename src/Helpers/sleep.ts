@@ -1,4 +1,4 @@
-import { type Abortable } from "node:events";
+import type { Abortable } from "node:events";
 
 /**
  * Sleep async function

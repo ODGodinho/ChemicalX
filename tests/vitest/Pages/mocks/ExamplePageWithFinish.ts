@@ -1,14 +1,19 @@
 import { Exception } from "@odg/exception";
 
 import {
-    BasePage, ODGDecorators, type PageEngineInterface, type SelectorType,
-} from "../../../src";
-import { type PageClassEngine } from "../playwright/engine";
+    BasePage,
+    ODGDecorators,
+    type PageEngineInterface,
+    type SelectorType,
+} from "../../../../src";
+import type { PageClassEngine } from "../../playwright/engine";
 
 @ODGDecorators.attemptableFlow()
-export class ExamplePageWithFinish extends BasePage<unknown, PageClassEngine & PageEngineInterface> {
+export class ExamplePageWithFinish extends BasePage<PageClassEngine & PageEngineInterface> {
 
     public $s: SelectorType = {};
+
+    public $$s = {};
 
     private testAttempt = 0;
 

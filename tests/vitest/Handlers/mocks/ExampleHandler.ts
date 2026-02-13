@@ -3,11 +3,13 @@ import {
     RetryAction,
     type HandlerFunction,
     type HandlerSolutionType,
-    type PageEngineInterface,
-} from "../../../../src";
-import { type PageClassEngine } from "../../playwright/engine";
+} from "src";
 
-export class WithoutFunctionHandler extends BaseHandler<unknown, PageClassEngine & PageEngineInterface> {
+import type { PageClassEngine } from "../../playwright/engine";
+
+export class ExampleHandler extends BaseHandler<PageClassEngine> {
+
+    public $$s = {};
 
     public async waitForHandler(): Promise<HandlerFunction> {
         return this.testSolution.bind(this);
@@ -19,6 +21,14 @@ export class WithoutFunctionHandler extends BaseHandler<unknown, PageClassEngine
 
     public async attempt(): Promise<number> {
         return 0;
+    }
+
+    public async success(): Promise<void> {
+        // Only for test
+    }
+
+    public async finish(): Promise<void> {
+        // Only for test
     }
 
 }

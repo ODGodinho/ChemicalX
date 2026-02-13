@@ -1,24 +1,31 @@
-import { type GetterAccessInterface } from "@interfaces";
-import { getAccessDecorator } from "@support/Decorators";
+import type { GetterAccessInterface } from "@interfaces";
+import { ODGDecorators } from "@support/Decorators";
 
 import {
-    type BrowserChemicalXInterface, type ContextChemicalXInterface,
-    type ContextEngineInterface, type ContextOptionsLibraryInterface,
+    CreateContextFactoryType,
+    CreatePageFactoryType,
+    type BrowserChemicalXInterface,
+    type BrowserEngineInterface,
+    type ContextChemicalXInterface,
+    type ContextEngineInterface,
+    type ContextOptionsLibraryInterface,
     type PageEngineInterface,
-    CreateContextFactoryType, CreatePageFactoryType, type BrowserEngineInterface,
 } from ".";
 
-@getAccessDecorator()
+@ODGDecorators.getterAccess()
 export class Browser<
-    BrowserEngineType extends BrowserEngineInterface,
-    ContextEngineType extends ContextEngineInterface,
-    PageEngineType extends PageEngineInterface,
-> implements GetterAccessInterface, BrowserChemicalXInterface<BrowserEngineType, ContextEngineType> {
+    BrowserClassEngine extends BrowserEngineInterface,
+    ContextClassEngine extends ContextEngineInterface,
+    PageClassEngine extends PageEngineInterface,
+> implements GetterAccessInterface, BrowserChemicalXInterface<BrowserClassEngine, ContextClassEngine> {
 
     public constructor(
-        public readonly $browserInstance: BrowserEngineType,
-        private readonly $newContext: CreateContextFactoryType<ContextEngineType, PageEngineType>,
-        private readonly $newPage: CreatePageFactoryType<ContextChemicalXInterface<ContextEngineType>, PageEngineType>,
+        public readonly $browserInstance: BrowserClassEngine,
+        private readonly $newContext: CreateContextFactoryType<ContextClassEngine, PageClassEngine>,
+        private readonly $newPage: CreatePageFactoryType<
+            ContextChemicalXInterface<ContextClassEngine>,
+            PageClassEngine
+        >,
     ) {
 
     }
@@ -30,12 +37,12 @@ export class Browser<
 
     public async newContext(
         options?: ContextOptionsLibraryInterface,
-    ): Promise<ContextChemicalXInterface<ContextEngineType> & ContextEngineType> {
+    ): Promise<ContextChemicalXInterface<ContextClassEngine> & ContextClassEngine> {
         const makeContext = (
             this.$browserInstance.newContext
             ?? this.$browserInstance.createIncognitoBrowserContext
             ?? this.$browserInstance.createBrowserContext
-        ) as (...arguments_: unknown[]) => Promise<ContextEngineType>;
+        ) as (...arguments_: unknown[]) => Promise<ContextClassEngine>;
 
         return this.$newContext(
             await makeContext.call(this.$browserInstance, {
@@ -43,19 +50,19 @@ export class Browser<
                 ...options,
             }),
             this.$newPage,
-        ) as ContextChemicalXInterface<ContextEngineType> & ContextEngineType;
+        ) as ContextChemicalXInterface<ContextClassEngine> & ContextClassEngine;
     }
 
-    public contexts(): Array<ContextChemicalXInterface<ContextEngineType> & ContextEngineType> {
+    public contexts(): Array<ContextChemicalXInterface<ContextClassEngine> & ContextClassEngine> {
         const defaultContext = "contexts" in this.$browserInstance
             && typeof this.$browserInstance.contexts === "function"
-            && (this.$browserInstance.contexts as () => ContextEngineType[])();
+            && (this.$browserInstance.contexts as () => ContextClassEngine[])();
         const contexts = defaultContext || [];
 
         return contexts.map((context) => this.$newContext(
             context,
             this.$newPage,
-        ) as ContextChemicalXInterface<ContextEngineType> & ContextEngineType);
+        ) as ContextChemicalXInterface<ContextClassEngine> & ContextClassEngine);
     }
 
     public __get(key: PropertyKey): unknown {

@@ -1,4 +1,4 @@
-import { type PromiseOrSyncType } from "#types/index";
+import type { PromiseOrSyncType } from "#types/index";
 
 /**
  * Retry options

@@ -1,7 +1,7 @@
-import { type Exception } from "@odg/exception";
+import type { Exception } from "@odg/exception";
 
-import { type PromiseOrSyncType } from "#types/index";
-import { type RetryAction } from "@enums";
+import type { PromiseOrSyncType } from "#types/index";
+import type { RetryAction } from "@enums";
 
 /**
  * Defines the options for a retry operation.
@@ -13,7 +13,7 @@ export interface RetryOptionsInterface<ReturnType = undefined> {
 
     /**
      * Number of times to retry
-     * 0 = No retry
+     * 0,1 = No retry only first attempt
      *
      * @type {number}
      * @memberof RetryOptionsInterface
@@ -88,10 +88,10 @@ export interface RetryWhenResolveInterface {
      *
      * @param {Exception} exception The exception caught during the attempt.
      * @param {number} times The number of attempts made so far. (starts at 1).
-     * @returns {PromiseOrSyncType<RetryAction.Default | RetryAction.Resolve | RetryAction.Retry | RetryAction.Throw>}
+     * @returns {PromiseOrSyncType<RetryAction>}
      */
     when?(
         exception: Exception,
         times: number
-    ): PromiseOrSyncType<RetryAction.Default | RetryAction.Resolve | RetryAction.Retry | RetryAction.Throw>;
+    ): PromiseOrSyncType<RetryAction>;
 }

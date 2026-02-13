@@ -1,4 +1,4 @@
-import { type NativeInterface, type CloneableInterface } from "../Interfaces";
+import type { CloneableInterface, NativeInterface } from "../Interfaces";
 
 /**
  * Class Helper to manipulate number
@@ -11,7 +11,8 @@ export class Num implements CloneableInterface, NativeInterface<number> {
 
     public constructor(
         private readonly subject: number,
-    ) { }
+    ) {
+    }
 
     /**
      * Clone This Object

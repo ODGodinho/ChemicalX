@@ -1,26 +1,27 @@
 import {
     ContextChemicalXInterface,
     ContextEngineInterface,
-    type GetterAccessInterface, type PageChemicalXInterface,
+    type GetterAccessInterface,
+    ODGDecorators,
+    type PageChemicalXInterface,
     type PageEngineInterface,
-    getAccessDecorator,
 } from "..";
 
-@getAccessDecorator()
+@ODGDecorators.getterAccess()
 export class Page<
-    ContextEngineType extends ContextEngineInterface,
-    PageEngineType extends PageEngineInterface,
-> implements GetterAccessInterface, PageChemicalXInterface<PageEngineType> {
+    ContextClassEngine extends ContextEngineInterface,
+    PageClassEngine extends PageEngineInterface,
+> implements GetterAccessInterface, PageChemicalXInterface<PageClassEngine> {
 
     public constructor(
-        public readonly $context: ContextChemicalXInterface<ContextEngineType>,
-        public readonly $pageInstance: PageEngineType,
+        public readonly $context: ContextChemicalXInterface<ContextClassEngine>,
+        public readonly $pageInstance: PageClassEngine,
     ) {
 
     }
 
-    public context(): ContextChemicalXInterface<ContextEngineType> {
-        return this.$context;
+    public context(): ContextChemicalXInterface<ContextClassEngine> & ContextClassEngine {
+        return this.$context as ContextChemicalXInterface<ContextClassEngine> & ContextClassEngine;
     }
 
     public __get(key: PropertyKey): unknown {

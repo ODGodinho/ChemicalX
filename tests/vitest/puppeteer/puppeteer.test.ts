@@ -1,11 +1,17 @@
 import puppeteer, { Mouse } from "puppeteer";
 
 import {
-    type ContextChemicalXInterface, type CreateContextFactoryType, type CreatePageFactoryType, BrowserManager,
+    type ContextChemicalXInterface,
+    type CreateContextFactoryType,
+    type CreatePageFactoryType,
+    BrowserManager,
 } from "../../../src";
 
-import {
-    type BrowserClassEngine, type ContextClassEngine, type MyBrowser, type PageClassEngine,
+import type {
+    BrowserClassEngine,
+    ContextClassEngine,
+    MyBrowser,
+    PageClassEngine,
 } from "./engine";
 
 import { Browser, Context, Page } from "./index";
@@ -45,12 +51,15 @@ describe("Example Teste", () => {
 
     test("Teste Instances elements", async () => {
         const context = await browser.newContext();
+
         expect(context.closed).toEqual(false);
         expect(typeof context.id).toBe("string");
         const page = await context.newPage();
+
         await page.goto("about:blank");
         await page.evaluate(() => {
             const newDiv = document.createElement("div");
+
             newDiv.textContent = "myDiv";
             document.body.append(newDiv);
         });

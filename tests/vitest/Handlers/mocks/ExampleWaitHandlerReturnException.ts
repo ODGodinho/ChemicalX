@@ -3,13 +3,14 @@ import { Exception } from "@odg/exception";
 import {
     BaseHandler,
     type HandlerFunction,
-    type PageEngineInterface,
     RetryAction,
 } from "src";
 
-import { type PageClassEngine } from "../../playwright/engine";
+import type { PageClassEngine } from "../../playwright/engine";
 
-export class ExampleWaitHandlerReturnException extends BaseHandler<unknown, PageClassEngine & PageEngineInterface> {
+export class ExampleWaitHandlerReturnException extends BaseHandler<PageClassEngine> {
+
+    public $$s = {};
 
     public async waitForHandler(): Promise<HandlerFunction> {
         return new Exception("stop process");

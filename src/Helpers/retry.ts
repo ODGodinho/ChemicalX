@@ -2,10 +2,10 @@ import { AbortException } from "@odg/exception";
 
 import { RetryAction } from "@enums";
 import { RetryException } from "@exceptions/RetryException";
-import {
-    type RetryOptionsInterface,
-    type RetryWhenDefaultInterface,
-    type RetryWhenResolveInterface,
+import type {
+    RetryOptionsInterface,
+    RetryWhenDefaultInterface,
+    RetryWhenResolveInterface,
 } from "@interfaces";
 
 import { sleep, throwIf } from ".";
@@ -13,13 +13,16 @@ import { sleep, throwIf } from ".";
 async function getWhen(
     exception: unknown,
     options: RetryOptionsInterface<unknown> & RetryWhenResolveInterface & { attempt: number },
-): Promise<RetryAction.Default | RetryAction.Resolve | RetryAction.Retry | undefined> {
+): Promise<Exclude<RetryAction, RetryAction.Throw> | undefined> {
     const exceptionParse = RetryException.parseOrDefault(exception, "Retry Unknown Exception");
+
     if (exceptionParse instanceof AbortException) throw exceptionParse;
 
     const when = await options.when?.(exceptionParse, options.attempt);
     const ignore = [ RetryAction.Retry, RetryAction.Resolve ];
+
     if (when === RetryAction.Throw) throw exceptionParse;
+
     if (options.signal?.aborted && when !== RetryAction.Resolve) {
         throw new AbortException("Retry Aborted", exceptionParse);
     }
@@ -35,7 +38,7 @@ async function getWhen(
  * Retry Function recursive
  *
  * @template {any} ReturnType
- * @param {RetryOptionsInterface<ReturnType> & { attempt: number }} options Options Retry
+ * @param {RetryOptionsInterface<ReturnType> & { attempt: number }} options Retry action all params options
  * @returns {Promise<ReturnType | undefined>}
  */
 async function retryHelper<ReturnType>(
@@ -52,9 +55,10 @@ async function retryHelper<ReturnType>(
             () => new AbortException(AbortException.parseOrDefault(options.signal?.reason, "Retry Aborted").message),
         );
 
-        return await options.callback.call(options.callback, options.attempt, options.signal);
+        return await options.callback(options.attempt, options.signal);
     } catch (exception: unknown) {
         const when = await getWhen(exception, options);
+
         if (when === RetryAction.Resolve) {
             return;
         }
@@ -74,7 +78,7 @@ export async function retry<ReturnType>(
 ): Promise<ReturnType>;
 
 export async function retry<ReturnType>(
-    options: RetryOptionsInterface<ReturnType> & RetryWhenResolveInterface
+    options: RetryOptionsInterface<ReturnType> & RetryWhenResolveInterface,
 ): Promise<ReturnType | undefined>;
 
 export async function retry<ReturnType>(

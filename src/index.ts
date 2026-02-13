@@ -4,7 +4,7 @@ export * from "./Helpers/index";
 
 export * from "./crawler/index";
 
-export * from "./Interfaces";
+export type * from "./Interfaces";
 
 export * from "./Exceptions";
 

@@ -1,4 +1,4 @@
-import { Container } from "inversify";
+import { TypedContainer } from "@inversifyjs/strongly-typed";
 
 import { ODGDecorators } from "src";
 
@@ -6,7 +6,8 @@ import { ExampleEventListeners } from "./ExampleEventListeners";
 
 describe("Container Test", () => {
     test("Test event listner notation", async () => {
-        const container = new Container();
+        const container = new TypedContainer();
+
         container.bind("ExampleEventListeners").to(ExampleEventListeners);
         const events = ODGDecorators.getEvents(container);
 

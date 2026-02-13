@@ -1,7 +1,7 @@
 import { InvalidArgumentException } from "@exceptions";
 import { TimeoutException } from "@exceptions/TimeoutException";
-import {
-    type TimeoutOptionsInterface,
+import type {
+    TimeoutOptionsInterface,
 } from "@interfaces";
 
 import { sleep } from ".";
@@ -15,7 +15,7 @@ export async function timeout<ReturnType>(
 
     return Promise.race([
         Promise.resolve()
-            .then(async () => options.callback.call(options.callback)),
+            .then(async () => options.callback()),
         sleep(options.timeout).then(() => {
             throw new TimeoutException(`${options.name! || "Default"} - Timeout ${options.timeout}ms exceeded`);
         }),

@@ -1,6 +1,4 @@
-export interface ContextOptionsLibraryInterface {
-
-}
+export type ContextOptionsLibraryInterface = object;
 
 export interface ContextEngineInterface {
     newPage: CallableFunction;

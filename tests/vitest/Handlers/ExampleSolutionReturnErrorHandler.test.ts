@@ -1,16 +1,15 @@
 import { Exception } from "@odg/exception";
-import { vi, type MockInstance } from "vitest";
+import { type Mock, vi } from "vitest";
 
-import { type HandlerSolutionType } from "@interfaces";
-import { ExampleSolutionReturnErrorHandler } from "tests/vitest/Handlers/mock/ExampleSolutionReturnErrorHandler";
-
-import { type PageClassEngine } from "../playwright/engine";
+import type { HandlerSolutionType } from "@interfaces";
+import { ExampleSolutionReturnErrorHandler } from "tests/vitest/Handlers/mocks/ExampleSolutionReturnErrorHandler";
 
 describe("Handler Retry tests", () => {
     let handler: ExampleSolutionReturnErrorHandler;
-    let handlerSolutionMock: MockInstance<unknown[], Promise<HandlerSolutionType>>;
+    let handlerSolutionMock: Mock<() => Promise<HandlerSolutionType>>;
+
     beforeEach(() => {
-        handler = new ExampleSolutionReturnErrorHandler(undefined as unknown as PageClassEngine, {});
+        handler = new ExampleSolutionReturnErrorHandler();
         handlerSolutionMock = vi.spyOn(handler, "testSolution");
     });
 
@@ -23,6 +22,7 @@ describe("Handler Retry tests", () => {
 
     test("Test Handler Solution return Exception after 2 times", async () => {
         const handlerRetrying = vi.spyOn(handler, "retrying");
+
         handlerSolutionMock.mockImplementation(async () => {
             if (handlerSolutionMock.mock.calls.length < 3) {
                 throw new Exception("Action force to retry");

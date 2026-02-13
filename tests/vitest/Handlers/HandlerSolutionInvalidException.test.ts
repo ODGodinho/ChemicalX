@@ -1,17 +1,17 @@
 import { Exception } from "@odg/exception";
-import { vi, type MockInstance } from "vitest";
+import { type Mock, vi } from "vitest";
 
 import { RetryAction } from "@enums";
-import { type HandlerFunction } from "@interfaces";
+import type { HandlerFunction, HandlerSolutionType } from "@interfaces";
 
-import { type PageClassEngine } from "../playwright/engine";
+import type { PageClassEngine } from "../playwright/engine";
 
-import { ExampleFailedAttemptHandler, ExampleHandler } from "./mock";
+import { ExampleFailedAttemptHandler, ExampleHandler } from "./mocks";
 
 describe("Handler Test Invalid Exception", () => {
     let handler: ExampleHandler;
-    let handlerSolutionMock: MockInstance<unknown[], Promise<RetryAction>>;
-    let handlerWaitForHandlerMock: MockInstance<unknown[], Promise<HandlerFunction>>;
+    let handlerSolutionMock: Mock<() => Promise<HandlerSolutionType>>;
+    let handlerWaitForHandlerMock: Mock<() => Promise<HandlerFunction>>;
 
     beforeEach(() => {
         handler = new ExampleHandler(undefined as unknown as PageClassEngine, {});
@@ -21,7 +21,8 @@ describe("Handler Test Invalid Exception", () => {
 
     test("Test solution exception code", async () => {
         handlerSolutionMock.mockImplementation(async () => {
-            // eslint-disable-next-line no-throw-literal
+            // Force teste unknown error
+            // eslint-disable-next-line @typescript-eslint/only-throw-error
             throw undefined;
         });
 
@@ -35,10 +36,7 @@ describe("Handler Test Invalid Exception", () => {
         });
         const handlerFailed = new ExampleFailedAttemptHandler(undefined as unknown as PageClassEngine, {});
 
-        const handlerFailWaitMock: MockInstance<
-            [_exception: Exception, _attempt: number],
-            Promise<RetryAction>
-        > = vi.spyOn(handlerFailed, "retrying");
+        const handlerFailWaitMock = vi.spyOn(handlerFailed, "retrying");
 
         handlerFailWaitMock.mockImplementation(async () => RetryAction.Resolve);
 

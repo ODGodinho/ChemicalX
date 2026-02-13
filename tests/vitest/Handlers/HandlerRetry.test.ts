@@ -1,16 +1,16 @@
-import { vi, type MockInstance } from "vitest";
+import { vi, type Mock } from "vitest";
 
 import { RetryAction, type HandlerSolutionType } from "../../../src";
-import { type PageClassEngine } from "../playwright/engine";
 
-import { ExampleHandler } from "./mock/ExampleHandler";
+import { ExampleHandler } from "./mocks/ExampleHandler";
 
 describe("Handler Retry tests", () => {
     let handler: ExampleHandler;
-    let handlerSolutionMock: MockInstance<unknown[], Promise<HandlerSolutionType>>;
-    let handlerAttemptMock: MockInstance<unknown[], Promise<number>>;
+    let handlerSolutionMock: Mock<() => Promise<HandlerSolutionType>>;
+    let handlerAttemptMock: Mock<() => Promise<number>>;
+
     beforeEach(() => {
-        handler = new ExampleHandler(undefined as unknown as PageClassEngine, {});
+        handler = new ExampleHandler();
         handlerSolutionMock = vi.spyOn(handler, "testSolution");
         handlerAttemptMock = vi.spyOn(handler, "attempt");
     });

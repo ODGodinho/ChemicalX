@@ -1,4 +1,4 @@
-import { type Exception } from "@odg/exception";
+import type { Exception } from "@odg/exception";
 
 export function throwIf(
     condition: true,

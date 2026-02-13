@@ -69,6 +69,7 @@ const multiple = [
 describe.each(values)("Test Money extract", (option) => {
     test(`Test Money extract ${option.expected}`, () => {
         const money = new Str(option.original).money();
+
         expect(money).toBeInstanceOf(Num);
         expect(money.toNumber()).toEqual(option.expected);
     });

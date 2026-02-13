@@ -1,4 +1,4 @@
-import { Str } from "../../../../src";
+import { Str } from "src";
 
 describe("formatUnicorn", () => {
     const words = {
@@ -11,6 +11,7 @@ describe("formatUnicorn", () => {
         const format = myString.formatUnicorn({
             "test": "replaced",
         });
+
         expect(format).toBeInstanceOf(Str);
         expect(format.toString()).toBe(words[word as keyof typeof words]);
     });

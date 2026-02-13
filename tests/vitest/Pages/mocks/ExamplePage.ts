@@ -5,20 +5,22 @@ import {
     ODGDecorators,
     type PageEngineInterface,
     type SelectorType,
-} from "../../../src";
-import { type PageClassEngine } from "../playwright/engine";
+} from "../../../../src";
+import type { PageClassEngine } from "../../playwright/engine";
 
 @ODGDecorators.injectablePageOrHandler("ExamplePage")
 @ODGDecorators.attemptableFlow()
-export class ExamplePage extends BasePage<unknown, PageClassEngine & PageEngineInterface> {
+export class ExamplePage extends BasePage<PageClassEngine & PageEngineInterface> {
 
     public $s: SelectorType = {};
+
+    public $$s = {};
+
+    public declare page: PageClassEngine & PageEngineInterface;
 
     public testIndex = 0;
 
     public async execute(): Promise<void> {
-        await this.preStart();
-
         await this.throwIfAttempt();
         await this.goto();
         expect(await this.page.waitForSelector("div", { timeout: 5000 })).toBeTruthy();
@@ -34,6 +36,7 @@ export class ExamplePage extends BasePage<unknown, PageClassEngine & PageEngineI
             .catch(() => null);
         await this.page.evaluate(() => {
             const newDiv = document.createElement("div");
+
             newDiv.textContent = "myDiv";
             document.body.append(newDiv);
         });
@@ -45,7 +48,7 @@ export class ExamplePage extends BasePage<unknown, PageClassEngine & PageEngineI
         this.testIndex++;
     }
 
-    public async finish(_exception?: Exception | undefined): Promise<void> {
+    public async finish(_exception?: Exception): Promise<void> {
         ++this.testIndex;
     }
 
