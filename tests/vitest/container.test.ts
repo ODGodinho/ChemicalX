@@ -9,7 +9,7 @@ describe("Container Test", () => {
             [exampleContainer]: BasePage<PageEngineInterface>;
         }>();
 
-        await container.load(ODGDecorators.loadModule(container));
+        ODGDecorators.loadModule(container);
         expect(() => container.get(exampleContainer)).not.toThrow();
 
         const examplePageInstance = container.get(exampleContainer);
@@ -29,10 +29,9 @@ describe("Container Test", () => {
         const container = new Container();
 
         Reflect.defineMetadata(ODGDecorators["metaDataPageOrHandler"], undefined, Reflect);
-        const loader = ODGDecorators.loadModule(container);
 
         await expect((async (): Promise<void> => {
-            await container.load(loader);
+            ODGDecorators.loadModule(container);
         })()).resolves.not.toThrow();
     });
 

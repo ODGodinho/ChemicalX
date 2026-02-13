@@ -1,4 +1,4 @@
-import { TypedContainerModule, type TypedContainer } from "@inversifyjs/strongly-typed";
+import type { TypedContainer } from "@inversifyjs/strongly-typed";
 import type {
     EventListener,
     EventListenerNotation,
@@ -12,7 +12,6 @@ import {
     injectable,
     injectFromHierarchy,
 } from "inversify";
-import "reflect-metadata";
 
 import { retry } from "@helpers";
 import type { AttemptableInterface, GetterAccessInterface } from "@interfaces";
@@ -122,20 +121,18 @@ export class ODGDecorators {
         return allEvents as EventListener<Events, keyof Events>;
     }
 
-    public static loadModule(containerInstance: TypedContainer): TypedContainerModule {
-        return new TypedContainerModule(() => {
-            const provideMetadata = Reflect.getMetadata(
-                ODGDecorators.metaDataPageOrHandler,
-                Reflect,
-            ) as ContainerMetadataInterface[] | undefined ?? [];
+    public static loadModule(containerInstance: TypedContainer): void {
+        const provideMetadata = Reflect.getMetadata(
+            ODGDecorators.metaDataPageOrHandler,
+            Reflect,
+        ) as ContainerMetadataInterface[] | undefined ?? [];
 
-            for (const metadata of provideMetadata) {
-                containerInstance
-                    .bind(metadata.name)
-                    .to(metadata.target)
-                    .inTransientScope();
-            }
-        });
+        for (const metadata of provideMetadata) {
+            containerInstance
+                .bind(metadata.name)
+                .to(metadata.target)
+                .inTransientScope();
+        }
     }
 
     private static getReflectEvents<Events extends EventObjectType>(): EventListenerNotation<Events, keyof Events> {
