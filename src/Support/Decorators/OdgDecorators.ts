@@ -121,7 +121,7 @@ export class ODGDecorators {
         return allEvents as EventListener<Events, keyof Events>;
     }
 
-    public static loadModule(containerInstance: TypedContainer): void {
+    public static async loadModule(containerInstance: TypedContainer): Promise<void> {
         const provideMetadata = Reflect.getMetadata(
             ODGDecorators.metaDataPageOrHandler,
             Reflect,
