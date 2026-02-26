@@ -60,8 +60,6 @@
     "author": "Dragons Gamers <https://www.linkedin.com/in/victor-alves-odgodinho>",
     "license": "MIT",
     "devDependencies": {
-        "@inversifyjs/binding-decorators": "^1.1.5",
-        "@inversifyjs/strongly-typed": "^2.2.0",
         "@odg/eslint-config": "^3",
         "@odg/events": "^1.2.0",
         "@odg/tsconfig": "*",
@@ -69,7 +67,6 @@
         "@vitest/coverage-istanbul": "^4.0.18",
         "concurrently": "^9.2.1",
         "husky": "^9.1.7",
-        "inversify": "^7.11.0",
         "lint-staged": "^16.2.7",
         "playwright": "^1.58.2",
         "puppeteer": "^24.37.2",
@@ -82,10 +79,14 @@
         "vitest": "^4.0.18"
     },
     "dependencies": {
-        "@odg/exception": "*"
+        "@odg/exception": "*",
+        "inversify": "^7.11.0",
+        "@inversifyjs/binding-decorators": "^1.1.5",
+        "@inversifyjs/strongly-typed": "^2.2.0"
     },
     "peerDependencies": {
         "@inversifyjs/strongly-typed": "^2.2.0",
+        "@inversifyjs/binding-decorators": "^2.2.0",
         "@odg/events": ">=1.2",
         "inversify": ">=7",
         "reflect-metadata": ">=0.2.2"
@@ -95,6 +96,9 @@
             "optional": true
         },
         "@inversifyjs/strongly-typed": {
+            "optional": true
+        },
+        "@inversifyjs/binding-decorators": {
             "optional": true
         },
         "@odg/events": {

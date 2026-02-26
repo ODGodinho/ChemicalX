@@ -1,4 +1,4 @@
-import { type BasePage, type PageEngineInterface, ODGDecorators } from "src";
+import { ODGDecorators, type BasePage, type PageEngineInterface } from "src";
 import { Container } from "src/Container";
 import "./Pages/mocks/ExamplePage";
 
@@ -9,7 +9,7 @@ describe("Container Test", () => {
             [exampleContainer]: BasePage<PageEngineInterface>;
         }>();
 
-        ODGDecorators.loadModule(container);
+        await ODGDecorators.loadModule(container);
         expect(() => container.get(exampleContainer)).not.toThrow();
 
         const examplePageInstance = container.get(exampleContainer);
@@ -31,7 +31,7 @@ describe("Container Test", () => {
         Reflect.defineMetadata(ODGDecorators["metaDataPageOrHandler"], undefined, Reflect);
 
         await expect((async (): Promise<void> => {
-            ODGDecorators.loadModule(container);
+            await ODGDecorators.loadModule(container);
         })()).resolves.not.toThrow();
     });
 
